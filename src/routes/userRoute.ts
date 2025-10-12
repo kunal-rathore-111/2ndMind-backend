@@ -1,30 +1,13 @@
 
 import express from "express";
+import { authMiddleware } from "../middlewares/authMiddleware.js";
+
+import { content } from "./contentRoute.js";
+import { contentController } from "../controllers/contentController.js";
+
 
 export const user = express();
-user.get('/dashboard', (req, res) => {
-    res.status(200).json({
-        message: "Dashboard loads successfull"
-    })
-});
+user.use('/content', authMiddleware, content);
 
+user.get('/dashboard', authMiddleware, contentController.dashboard);
 
-//should on different route file
-user.post('/app/v1/add', (req, res) => {
-    res.status(200).json({
-        message: "Added"
-    })
-});
-
-
-user.delete('/app/v1/delete', (req, res) => {
-    res.status(200).json({
-        message: "Deleted"
-    })
-});
-
-user.patch('/app/v1/update', (req, res) => {
-    res.status(200).json({
-        message: "Updated"
-    })
-});

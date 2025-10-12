@@ -3,6 +3,7 @@ import 'dotenv/config';
 // dependencies
 import morgan from 'morgan';
 import express from "express";
+import cookieParser from 'cookie-parser';
 
 // db connection
 import { connectDB } from './config/dbConnection.js';
@@ -12,6 +13,7 @@ const app = express();
 const PORT = process.env.PORT;
 app.use(morgan('dev'));
 app.use(express.json());
+app.use(cookieParser());
 
 connectDB();
 
