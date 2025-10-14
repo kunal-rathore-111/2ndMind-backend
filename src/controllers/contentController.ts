@@ -25,7 +25,9 @@ const addContent = async (req: Request, res: Response, next: NextFunction) => {
 
 const deleteContent = async (req: Request, res: Response) => {
     //@ts-ignore
-    const { userId, contentId } = req;
+    const userId = req.userId;
+    //@ts-ignore
+    const contentId = req.contentId;
     await deleteContentDBFunction({ userId, contentId });
     return res.status(200).json({
         message: "Deleted"

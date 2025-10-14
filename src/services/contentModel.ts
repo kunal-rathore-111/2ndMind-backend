@@ -26,11 +26,13 @@ export const addContentDBFunction = async (data: z.infer<typeof contentZodSchema
 
 export const deleteContentDBFunction = async (
     { userId, contentId }: objectIdInterface) => {
-
+    console.log(userId);
     console.log("\nDB deleteContentDBFunction called\n");
-    await ContentModel.deleteOne({
-        userId, contentId
+    const d = await ContentModel.deleteOne({
+        userId, _id: contentId
     });
+    console.log(d);
+
 }
 
 
