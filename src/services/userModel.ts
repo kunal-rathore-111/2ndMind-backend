@@ -1,16 +1,27 @@
 
 
 import { UsersModel } from "../collections/userCollection.js";
+import { decodePassword, hashPassword } from "../utils/bcrypt.js";
 
 export const createUser = async (username: string, password: string) => {
-    //  need to hash password + errors
+    //  need to handle errors
+    const hashedPassword = await hashPassword(password);
     await UsersModel.create({
-        username, password
+        username, password: hashedPassword
     });
 }
 export const findUser = async (username: string, password: string) => {
-    //  need to hash password + errors
-    return await UsersModel.findOne({
-        username, password
+
+    const result = await UsersModel.findOne({
+        username
     });
+    if (!result?.password) {
+        console.log('userNot Found');
+        return;
+    }
+    else {
+        const Response = await decodePassword(password, result.password);
+        if (Response) return result;
+        else return;
+    }
 }

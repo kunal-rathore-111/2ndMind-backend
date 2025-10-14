@@ -1,10 +1,11 @@
 
 import express from "express";
 import { contentController } from "../controllers/contentController.js";
+import { contentZod } from "../middlewares/contentMiddleware.js";
 
 export const content = express();
 
-content.post('/add', contentController.addContent);
+content.post('/add', contentZod, contentController.addContent);
 
 
 content.delete('/delete', (req, res) => {
