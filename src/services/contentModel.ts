@@ -3,8 +3,12 @@ import type mongoose from "mongoose";
 import { ContentModel } from "../collections/contentsCollection.js";
 import { contentZodSchema } from "../validator/zod/contentZod.js";
 
+interface objectIdInterface {
+    userId?: mongoose.Types.ObjectId
+    contentId?: mongoose.Types.ObjectId | string
+}
 
-export const getContentDBFunction = async (userId: mongoose.Types.ObjectId) => {
+export const getContentDBFunction = async (userId: objectIdInterface) => {
     return await ContentModel.find({
         userId
     });
@@ -19,3 +23,14 @@ export const addContentDBFunction = async (data: z.infer<typeof contentZodSchema
         title, discription, link, tags, userId
     });
 }
+
+export const deleteContentDBFunction = async (
+    { userId, contentId }: objectIdInterface) => {
+
+    console.log("\nDB deleteContentDBFunction called\n");
+    await ContentModel.deleteOne({
+        userId, contentId
+    });
+}
+
+

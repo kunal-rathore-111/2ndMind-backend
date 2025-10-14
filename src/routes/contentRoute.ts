@@ -1,18 +1,14 @@
 
 import express from "express";
 import { contentController } from "../controllers/contentController.js";
-import { contentZod } from "../middlewares/contentMiddleware.js";
+import { contentZod_MW, deleteContent_MW } from "../middlewares/contentMiddleware.js";
 
 export const content = express();
 
-content.post('/add', contentZod, contentController.addContent);
+content.post('/add', contentZod_MW, contentController.addContent);
 
 
-content.delete('/delete', (req, res) => {
-    res.status(200).json({
-        message: "Deleted"
-    })
-});
+content.delete('/delete/:contentId', deleteContent_MW, contentController.deleteContent);
 
 content.patch('/update', (req, res) => {
     res.status(200).json({

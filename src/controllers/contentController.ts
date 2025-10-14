@@ -1,7 +1,8 @@
 
 
 import type { NextFunction, Request, Response } from "express";
-import { addContentDBFunction, getContentDBFunction } from "../services/contentModel.js";
+import { addContentDBFunction, deleteContentDBFunction, getContentDBFunction } from "../services/contentModel.js";
+import { deleteModel, type Types } from "mongoose";
 
 export const dashboard = async (req: Request, res: Response, next: NextFunction) => {
     //@ts-ignore
@@ -22,4 +23,13 @@ const addContent = async (req: Request, res: Response, next: NextFunction) => {
     });
 }
 
-export const contentController = { dashboard, addContent }
+const deleteContent = async (req: Request, res: Response) => {
+    //@ts-ignore
+    const { userId, contentId } = req;
+    await deleteContentDBFunction({ userId, contentId });
+    return res.status(200).json({
+        message: "Deleted"
+    });
+}
+
+export const contentController = { dashboard, addContent, deleteContent }
