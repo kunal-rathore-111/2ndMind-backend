@@ -9,9 +9,11 @@ content.post('/add', contentZod_MW, contentController.addContent);
 
 
 content.delete('/delete/:contentId', deleteContent_MW, contentController.deleteContent);
-
+/* 
+will complete later
 content.patch('/update', (req, res) => {
     res.status(200).json({
         message: "Updated"
     })
-});
+}); */
+

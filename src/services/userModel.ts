@@ -1,7 +1,7 @@
 
 
 import { UsersModel } from "../collections/userCollection.js";
-import { decodePassword, hashPassword } from "../utils/bcrypt.js";
+import { decodePassword, hashPassword } from "../utils/hashFunc.js";
 
 export const createUser = async (username: string, password: string) => {
     //  need to handle errors

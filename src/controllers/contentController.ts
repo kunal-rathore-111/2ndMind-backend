@@ -2,7 +2,9 @@
 
 import type { NextFunction, Request, Response } from "express";
 import { addContentDBFunction, deleteContentDBFunction, getContentDBFunction } from "../services/contentModel.js";
-import { deleteModel, type Types } from "mongoose";
+import { dataByShareLinkFunc } from "../services/linkModel.js";
+
+
 
 export const dashboard = async (req: Request, res: Response, next: NextFunction) => {
     //@ts-ignore
@@ -34,4 +36,14 @@ const deleteContent = async (req: Request, res: Response) => {
     });
 }
 
-export const contentController = { dashboard, addContent, deleteContent }
+const publicDashboard = async (req: Request, res: Response) => {
+    const hash = req.params.share_hash;
+    if (!hash) return 'no hash found';
+    const result = await dataByShareLinkFunc(hash);
+    return res.json({
+        result
+    })
+
+}
+
+export const contentController = { dashboard, addContent, deleteContent, publicDashboard }
