@@ -15,7 +15,7 @@ export const createShareLinkFunc = async (userId: Types.ObjectId) => {
         hash,
         userId
     });
-    if (res) return `http://localhost:4001/app/v1/user/shared-user/${hash}`;
+    if (res) return `http://localhost:4001/app/v1/user/shared-user/${hash}`; // just need to return hash and have to mangae the remain url in frontend
     return 'Null';
 }
 
@@ -42,6 +42,6 @@ export const dataByShareLinkFunc = async (hash: string) => {
         if (data) return data;
         else return 'user not exists';  // if the use may be delete the account so contnetModel will null therefore returning this
     } else {
-        return 'invalid user id';
+        return 'NOT FOUND';
     }
 }
