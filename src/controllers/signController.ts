@@ -25,7 +25,9 @@ export const signInController = async (req: Request, res: Response) => {
 
     if (result) {
         const jwtToken = createJWT(result._id); // creating jwt and sending in cookies
-        res.cookie('token', jwtToken).status(200).json({
+        res.cookie('token', jwtToken, {
+            httpOnly: true, sameSite: "lax", secure: false
+        }).status(200).json({
             message: "Sign-in successfull"
         })
     }

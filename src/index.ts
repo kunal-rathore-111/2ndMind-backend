@@ -9,13 +9,14 @@ import cookieParser from 'cookie-parser';
 // db connection
 import { connectDB } from './config/dbConnection.js';
 import { indexRoute } from './routes/indexRoutes.js';
-import { any } from 'zod';
 
 const app = express();
 const PORT = process.env.PORT;
 app.use(morgan('dev'));
 app.use(cors({
-    origin: "*"
+    origin: "http://localhost:5173",
+    credentials: true,
+
 }));
 app.use(express.json());
 app.use(cookieParser());
