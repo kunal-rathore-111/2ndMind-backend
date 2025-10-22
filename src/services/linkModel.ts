@@ -15,7 +15,7 @@ export const createShareLinkFunc = async (userId: Types.ObjectId) => {
         hash,
         userId
     });
-    if (res) return `http://localhost:4001/app/v1/user/shared-user/${hash}`; // just need to return hash and have to mangae the remain url in frontend
+    if (res) return hash;
     return 'Null';
 }
 

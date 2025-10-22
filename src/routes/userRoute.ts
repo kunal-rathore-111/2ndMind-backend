@@ -13,4 +13,4 @@ user.use('/content', authMiddleware, content);
 user.get('/dashboard', authMiddleware, contentController.dashboard);
 user.post('/share', authMiddleware, userController.shareLink);
 
-user.get('/shared-user/:share_hash', contentController.publicDashboard);
+user.get('/:share_hash', contentController.publicDashboard);

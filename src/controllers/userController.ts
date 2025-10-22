@@ -9,8 +9,8 @@ const shareLink = async (req: Request, res: Response) => {
     const userId = req.userId;
     console.log(userId);
     if (share) {
-        const shareLink = await createShareLinkFunc(userId);
-        res.json({ url: shareLink })
+        const shareHash = await createShareLinkFunc(userId);
+        res.json({ hash: shareHash })
     }
     else {
         await deleteShareLinkFunc(userId);
