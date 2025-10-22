@@ -9,10 +9,10 @@ import { dataByShareLinkFunc } from "../services/linkModel.js";
 export const dashboard = async (req: Request, res: Response, next: NextFunction) => {
     //@ts-ignore
     const userId = req.userId;
-    const result = await getContentDBFunction(userId);
+    const data = await getContentDBFunction(userId);
     res.status(200).json({
         message: "Dashboard loads successfull",
-        result
+        data
     });
 }
 
