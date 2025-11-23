@@ -5,7 +5,3 @@ dist/
 *.tsbuildinfo
 .env
 .vscode/
-
-/src/generated/prisma
-
-/src/generated/prisma

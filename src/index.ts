@@ -10,9 +10,12 @@ import cookieParser from 'cookie-parser';
 import { connectDB } from './config/dbConnection.js';
 import { indexRoute } from './routes/indexRoutes.js';
 import AppError from './middlewares/appError.js';
+import { connectPostgres } from './config/dbConfig.js';
+import { createUser2 } from './services/postgres/userModel.js';
+
 
 const app = express();
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3001;
 
 
 app.use(helmet());
@@ -36,6 +39,9 @@ app.use(cookieParser());
 
 
 connectDB();
+connectPostgres();
+
+createUser2();
 
 
 app.use('/app/v1', indexRoute);
