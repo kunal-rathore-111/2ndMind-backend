@@ -9,7 +9,6 @@ import cookieParser from 'cookie-parser';
 import AppError from './middlewares/appError.js';
 // db connection
 import { connectDB } from './config/dbConnection.js';
-import { connectPostgres } from './config/dbConfig.js';
 
 import { requestIdMiddleware } from './middlewares/requestIdMiddleware.js';
 
@@ -40,7 +39,6 @@ app.use(cookieParser());
 
 
 connectDB();
-connectPostgres();
 
 
 app.use('/app/v1', requestIdMiddleware, indexRoute);

@@ -1,65 +1,33 @@
 import type { ErrorRequestHandler } from "express";
-import { Prisma } from "../generated/prisma/client.js";
 
 
-
-export const errorMiddleware: ErrorRequestHandler = (err, req, res, next) => {
+export const errorMiddleware: ErrorRequestHandler = (err, req, res) => {
 
     const isProduction = process.env.NODE_ENV === 'production';
 
 
-    let message = err.message || 'Something went wrong';
-    let statusCode = Number(err.statusCode || err.status || 500);
-    let errorType = err.errorType || 'ServerError';
+    let message = err?.message || 'Something went wrong';
+    let statusCode = Number(err?.statusCode || err?.status || 500);
+    let errorType = err?.errorType || 'ServerError';
 
-    let shouldShown = err.shouldShown;
+    let shouldShown = err?.shouldShown;
 
-    let requestId = req.requestId || 'unknown';
+    let requestId = req?.requestId || 'unknown';
 
-    // prisma wrapped db errors
-    if (err instanceof Prisma.PrismaClientKnownRequestError) {
+    const sqlCode = typeof err?.code === 'string' ? err.code : undefined;
+    if (['23505', '23503', '22P02'].includes(sqlCode || '')) { /* use sqlCode in switch */ }
 
-        switch (err.code) {
-            case 'P2002': //Unique constraint failed
-                statusCode = 409;
-                errorType = 'Conflict'
-                const target = err?.meta?.target;//gives array or single value eg- [emai] or [email, username...]
-
-                const field = Array.isArray(target) ? target.join(', ') : target;
-                shouldShown = true;
-                message = `${field} already exists`
-                break;
-
-            case 'P2003': //Foreign key constraint failed
-                statusCode = 409
-                errorType = 'ForeignKeyViolation'
-                message = 'Foreign key constraint failed'
-                shouldShown = true;
-                break;
-
-            case 'P2025': //Record not found
-                statusCode = 404;
-                errorType = 'NotFound';
-                message = 'Record not found';
-                shouldShown = true;
-                break;
-
-            default:
-                // other any error
-                statusCode = 400
-                shouldShown = true;
-                errorType = 'DB error'
-                message = err.message;
-                break;
-        }
-    }
-    else if (['23505', '23503', '22P02'].includes(err.code)) {
+    if (sqlCode) {
         // Fallback- handle Postgres SQLSTATE error codes if they surface
-        switch (err.code) {
+        switch (sqlCode) {
             case '23505': // unique_violation
                 statusCode = 409;
                 errorType = 'Conflict';
-                message = 'Already Exists';
+
+                const detail = String(err?.detail || '');
+                const m = /Key \((.+)\)=\((.*)\) already exists/.exec(detail);
+                const field = m ? m[1] : (typeof err?.constraint === 'string' ? err.constraint.split('_').slice(-2, -1)[0] : 'value');
+                message = `${field} already exists`;
                 shouldShown = true;
                 break;
             case '23503': // foreign_key_violation
@@ -77,26 +45,39 @@ export const errorMiddleware: ErrorRequestHandler = (err, req, res, next) => {
             default:
                 // leave defaults
                 errorType = 'DB error'
-                message = err.message;
+                message = err?.message || message;
                 shouldShown = true;
                 break;
         }
     }
+
+    // Drizzle errors (query/validation)
+    if (err?.name === 'DrizzleError') {
+        statusCode = Math.max(400, statusCode);
+        errorType = 'BadRequest';
+        message = err?.message || message;
+        shouldShown = true;
+    }
+
+
     //jwt errors
-    if (err.name === 'JsonWebTokenError') {
+    if (err?.name === 'JsonWebTokenError') {
         statusCode = 401;
         errorType = 'Unauthorized';
         message = 'Invalid token';
         shouldShown = true;
     }
-    if (err.name === 'TokenExpiredError') {
+    if (err?.name === 'TokenExpiredError') {
         statusCode = 401;
         errorType = 'Unauthorized';
         message = 'Token expired';
         shouldShown = true;
     }
 
-    const isServerError = statusCode >= 500;
+    const originalStatus = Number(err?.statusCode || err?.status || 500);
+    const isServerError = originalStatus >= 500;
+    const responseStatus = isServerError ? 500 : originalStatus;
+
     // to use in both clientside and serverside errors
     function showErrors() {
         console.error('requestId: ', requestId);
@@ -132,7 +113,7 @@ export const errorMiddleware: ErrorRequestHandler = (err, req, res, next) => {
 
     }
 
-    res.status(statusCode).json({
+    res.status(responseStatus).json({
         requestId,
         errorType,
         message,
