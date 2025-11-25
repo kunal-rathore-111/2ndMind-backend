@@ -1,13 +1,12 @@
 
 import mongoose, { model, Schema } from "mongoose";
-import { required } from "zod/mini";
 
 const tag = new Schema({
     tag: { type: String, require: true },
 });
 
 const ContentSchema = new Schema({
-    title: { type: String, require: true },
+    title: { type: String, required: true },
     discription: { type: String },
     link: { type: String, required: true },
     type: { type: String, enum: ['Youtube', 'Twitter', 'Other'], required: true },

@@ -15,3 +15,12 @@ model UsersModel {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 }
+
+model ContentModel{
+  id Int @id @default(autoincrement())
+  title String 
+  discription String 
+  link String
+  
+}
+

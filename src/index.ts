@@ -6,13 +6,14 @@ import morgan from 'morgan';
 import express from "express";
 import cookieParser from 'cookie-parser';
 
+import AppError from './middlewares/appError.js';
 // db connection
 import { connectDB } from './config/dbConnection.js';
-import { indexRoute } from './routes/indexRoutes.js';
-import AppError from './middlewares/appError.js';
 import { connectPostgres } from './config/dbConfig.js';
-import { createUser2 } from './services/postgres/userModel.js';
 
+import { requestIdMiddleware } from './middlewares/requestIdMiddleware.js';
+
+import { indexRoute } from './routes/indexRoutes.js';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -41,9 +42,7 @@ app.use(cookieParser());
 connectDB();
 connectPostgres();
 
-createUser2();
 
-
-app.use('/app/v1', indexRoute);
+app.use('/app/v1', requestIdMiddleware, indexRoute);
 
 app.listen(PORT, () => { console.log(`Server started at ${PORT}`) })
