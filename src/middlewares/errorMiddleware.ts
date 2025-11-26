@@ -1,7 +1,7 @@
 import type { ErrorRequestHandler } from "express";
 
 
-export const errorMiddleware: ErrorRequestHandler = (err, req, res) => {
+export const errorMiddleware: ErrorRequestHandler = (err, req, res, next) => {
 
     const isProduction = process.env.NODE_ENV === 'production';
 
@@ -14,7 +14,8 @@ export const errorMiddleware: ErrorRequestHandler = (err, req, res) => {
 
     let requestId = req?.requestId || 'unknown';
 
-    const sqlCode = typeof err?.code === 'string' ? err.code : undefined;
+    const sqlCode = typeof err?.code === "string" && err.code || typeof err?.cause?.code === "string" && err.cause.code;
+
     if (['23505', '23503', '22P02'].includes(sqlCode || '')) { /* use sqlCode in switch */ }
 
     if (sqlCode) {

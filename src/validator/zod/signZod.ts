@@ -1,16 +1,20 @@
 
-import { z } from 'zod';
+import { regex, z } from 'zod';
 
-const signSchema = z.object({
-    username: z.string().min(4, { message: "Please increase username length" }).max(200, { message: "Please decrease username length" }),
+
+
+export const signInSchema = z.object({
+    email: z.email().min(4).max(200),
     password: z.string().
         min(4, { message: "Please increase password length" }).
         max(200, { message: "Please decrease password length" }).
-        refine((val: string) => /[a-z]/.test(val), { message: "Please include one lowercase character in password" }).
-        refine((val: string) => /[A-Z]/.test(val), { message: "Please include one uppercase character in password" }).
-        refine((val: string) => /[0-9]/.test(val), { message: "Please include one number as character in password" })
+        regex(/[a-z]/, { message: "Please include one lowercase character in password" }).
+        regex(/[A-Z]/, { message: "Please include one uppercase character in password" }).
+        regex(/[0-9]/, { message: "Please include one number as character in password" }).
+        regex(/[&%$#@!]/, { message: "Password must contain at least one- &%$#@!" }),
 });
 
-export function signValidator(data: z.infer<typeof signSchema>) {
-    return signSchema.safeParse(data);
-}
+
+export const signUpSchema = signInSchema.extend({
+    username: z.string().min(4, { message: "Please increase username length" }).max(200, { message: "Please decrease username length" }),
+})

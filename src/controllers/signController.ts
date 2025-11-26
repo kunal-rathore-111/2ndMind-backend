@@ -3,14 +3,15 @@ import type { Request, Response } from "express";
 import { createJWT } from "../utils/jwt.js";
 import { signIn_Url } from '../utils/urls.js';
 import { createUser, findUser } from "../services/userModel.js";
+import { createUser2, findUser2 } from "../services/drizzle/usersTable.js";
 
 
 
 export const signUpController = async (req: Request, res: Response) => {
 
-    const { username, password } = req.body;
+    const { username, email, password } = req.body;
     // storing in db 
-    await createUser(username, password);
+    await createUser2(username, email, password);
 
     return res.status(201).json({
         message: "sign-up successfull",
@@ -19,12 +20,12 @@ export const signUpController = async (req: Request, res: Response) => {
 }
 
 export const signInController = async (req: Request, res: Response) => {
-    const { username, password } = req.body;
+    const { email, password } = req.body;
     // finding  does user exists in db 
-    const result = await findUser(username, password);
+    const result = await findUser2(email, password);
 
     if (result) {
-        const jwtToken = createJWT(result._id); // creating jwt and sending in cookies
+        const jwtToken = createJWT(result.id); // creating jwt and sending in cookies
         res.cookie('token', jwtToken, {
             httpOnly: true, sameSite: "lax", secure: false
         }).status(200).json({

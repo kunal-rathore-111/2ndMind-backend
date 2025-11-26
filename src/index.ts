@@ -13,6 +13,7 @@ import { connectDB } from './config/dbConnection.js';
 import { requestIdMiddleware } from './middlewares/requestIdMiddleware.js';
 
 import { indexRoute } from './routes/indexRoutes.js';
+import { errorMiddleware } from './middlewares/errorMiddleware.js';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -42,5 +43,7 @@ connectDB();
 
 
 app.use('/app/v1', requestIdMiddleware, indexRoute);
+
+app.use(errorMiddleware);
 
 app.listen(PORT, () => { console.log(`Server started at ${PORT}`) })

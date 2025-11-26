@@ -1,12 +1,17 @@
 import type { Request, Response, NextFunction } from "express";
 
-import { signValidator } from "../validator/zod/signZod.js";
+import AppError from "./appError.js";
+import type { ZodSchema } from "zod";
+// middleware factory= middleware inside function
+export const signZod = (schema: ZodSchema) => {
+    return (req: Request, res: Response, next: NextFunction) => {
 
-export const signZod = (req: Request, res: Response, next: NextFunction) => {
-    const result = signValidator(req.body);
-    if (result.success) next();
-    else res.status(422).json({ message: "wrong inputs need to change to zod error using global middleaware" });
+        const result = schema.safeParse(req.body);
 
-    console.log(result);
+        if (result.success) return next();
+
+        throw new AppError(`${result?.error?.issues?.[0]?.message}`, 400, 'BadRequest')
+
+    }
 }
 
