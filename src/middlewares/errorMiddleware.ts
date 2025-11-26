@@ -20,14 +20,17 @@ export const errorMiddleware: ErrorRequestHandler = (err, req, res, next) => {
 
     if (sqlCode) {
         // Fallback- handle Postgres SQLSTATE error codes if they surface
+        // creating the constraint original columns
+        const constraint_fieldMap: Record<string, string> = {
+            usersTable_email_unique: 'email'
+        }
         switch (sqlCode) {
             case '23505': // unique_violation
                 statusCode = 409;
                 errorType = 'Conflict';
+                const constraint = err?.cause?.constraint_name || "value";
+                const field = constraint_fieldMap[constraint] || 'value'
 
-                const detail = String(err?.detail || '');
-                const m = /Key \((.+)\)=\((.*)\) already exists/.exec(detail);
-                const field = m ? m[1] : (typeof err?.constraint === 'string' ? err.constraint.split('_').slice(-2, -1)[0] : 'value');
                 message = `${field} already exists`;
                 shouldShown = true;
                 break;
@@ -86,25 +89,24 @@ export const errorMiddleware: ErrorRequestHandler = (err, req, res, next) => {
         console.error('errorType: ', errorType);
         console.error('Message: ', message);
 
-        if (isServerError) console.error('Stack:', err?.stack);
+        if (isServerError) {
+            console.error('Stack:', err?.stack);
+            console.error("\n\n\nCOMPLETE Error-\n", err)
+        }
 
         console.error('-----------------------');
     }
 
-    if (isProduction) {
-        if (isServerError) {
-            console.error('----Server Side Error----');
-            showErrors();
-
-        }
-        else {
-            console.error('----Client Side Error----');
-            showErrors();
-        }
-    } else {
+    if (isServerError) {
         console.error('----Server Side Error----');
         showErrors();
+
     }
+    else {
+        console.error('----Client Side Error----');
+        showErrors();
+    }
+
 
 
     if (isProduction && isServerError && !shouldShown) {

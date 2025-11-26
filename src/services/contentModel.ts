@@ -18,9 +18,9 @@ export const addContentDBFunction = async (data: z.infer<typeof contentZodSchema
 
     console.log("\nDB addContentDBFunction called\n");
 
-    const { title, discription, link, tags, type } = data;
+    const { title, description, link, tags, type } = data;
     await ContentModel.create({
-        title, discription, type, link, tags, userId
+        title, description, type, link, tags, userId
     });
 }
 

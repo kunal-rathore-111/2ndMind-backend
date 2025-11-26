@@ -1,7 +1,8 @@
 CREATE TYPE "public"."contentType" AS ENUM('Twitter', 'Youtube', 'Instagram', 'Other');--> statement-breakpoint
 CREATE TABLE "contentTable" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-	"discription" varchar(1000),
+	"title" varchar(100) NOT NULL,
+	"description" varchar(1000),
 	"link" varchar(1000) NOT NULL,
 	"type" "contentType" DEFAULT 'Other' NOT NULL,
 	"tags" varchar(50)[],

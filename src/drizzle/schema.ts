@@ -17,7 +17,8 @@ export const contentType = pgEnum('contentType', ['Twitter', 'Youtube', 'Instagr
 
 export const ContentTable = pgTable("contentTable", {
     id: uuid('id').primaryKey().defaultRandom(),
-    discription: varchar('discription', { length: 1000 }),
+    title: varchar('title', { length: 100 }).notNull(),
+    description: varchar('description', { length: 1000 }),
     link: varchar('link', { length: 1000 }).notNull(),
     type: contentType().default('Other').notNull(),
     tags: varchar('tags', { length: 50 }).array(),
