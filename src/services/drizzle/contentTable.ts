@@ -5,13 +5,13 @@ import type { z } from "zod";
 import type { contentZodSchema } from "../../validator/zod/contentZod.js";
 
 
-export const getContentDBFunction2 = async (userId: string) => {
+export const getContentDBFunction = async (userId: string) => {
     return await db.query.ContentTable.findMany({
         where: eq(ContentTable.userId, userId)
     })
 }
 
-export const addContentDBFunction2 = async (data: z.infer<typeof contentZodSchema>, userId: string) => {
+export const addContentDBFunction = async (data: z.infer<typeof contentZodSchema>, userId: string) => {
     let { title, description, link, tags, type } = data;
 
     console.log("\nDB addContentDBFunction called\n");
@@ -28,7 +28,7 @@ interface objectIdInterface {
     contentId: string
 }
 
-export const deleteContentDBFunction2 = async (
+export const deleteContentDBFunction = async (
     { userId, contentId }: objectIdInterface) => {
 
     console.log("\nDB deleteContentDBFunction called\n");

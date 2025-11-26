@@ -22,7 +22,8 @@ export const errorMiddleware: ErrorRequestHandler = (err, req, res, next) => {
         // Fallback- handle Postgres SQLSTATE error codes if they surface
         // creating the constraint original columns
         const constraint_fieldMap: Record<string, string> = {
-            usersTable_email_unique: 'email'
+            usersTable_email_unique: 'email',
+            linkTable_userId_unique: 'link'
         }
         switch (sqlCode) {
             case '23505': // unique_violation

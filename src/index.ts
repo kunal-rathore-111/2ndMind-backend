@@ -7,8 +7,6 @@ import express from "express";
 import cookieParser from 'cookie-parser';
 
 import AppError from './middlewares/appError.js';
-// db connection
-import { connectDB } from './config/dbConnection.js';
 
 import { requestIdMiddleware } from './middlewares/requestIdMiddleware.js';
 
@@ -39,7 +37,6 @@ app.use(express.json());
 app.use(cookieParser());
 
 
-connectDB();
 
 
 app.use('/app/v1', requestIdMiddleware, indexRoute);

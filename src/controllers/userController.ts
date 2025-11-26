@@ -1,5 +1,6 @@
 import type { Request, Response } from "express";
-import { createShareLinkFunc, deleteShareLinkFunc } from "../services/linkModel.js";
+import { createShareLinkFunc, deleteShareLinkFunc } from "../services/drizzle/linkTable.js";
+
 
 
 const shareLink = async (req: Request, res: Response) => {

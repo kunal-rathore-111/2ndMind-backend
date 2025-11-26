@@ -6,7 +6,7 @@ import { eq } from 'drizzle-orm';
 
 
 
-export const createUser2 = async (username: string, email: string, password: string) => {
+export const createUser = async (username: string, email: string, password: string) => {
 
     const hashedPassword = await hashPassword(password);
 
@@ -15,7 +15,7 @@ export const createUser2 = async (username: string, email: string, password: str
         username, email, password: hashedPassword
     });
 }
-export const findUser2 = async (email: string, password: string) => {
+export const findUser = async (email: string, password: string) => {
     const user = await db.query.UsersTable.findFirst({
         where: eq(UsersTable.email, email)
     });

@@ -33,7 +33,7 @@ export const tagsTable = pgTable('tagsTable', { // for vector search
 
 export const LinkTable = pgTable('linkTable', {
     id: uuid('id').primaryKey().defaultRandom(),
-    linkhash: varchar('linkhash', { length: 60 }).notNull(),
+    linkHash: varchar('linkhash', { length: 130 }).notNull(),
     userId: uuid('userId').notNull().references(() => UsersTable.id, { onDelete: 'cascade' }).unique()
 })
 

@@ -1,8 +1,8 @@
 
 
 import type { NextFunction, Request, Response } from "express";
-import { addContentDBFunction, deleteContentDBFunction, getContentDBFunction } from "../services/contentModel.js";
-import { dataByShareLinkFunc } from "../services/linkModel.js";
+import { dataByShareLinkFunc } from "../services/drizzle/linkTable.js";
+import { addContentDBFunction, deleteContentDBFunction, getContentDBFunction } from "../services/drizzle/contentTable.js";
 
 
 

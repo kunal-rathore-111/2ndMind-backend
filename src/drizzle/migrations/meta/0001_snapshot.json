@@ -1,6 +1,6 @@
 {
-  "id": "1616e1fe-bcc1-4955-a3aa-f36ce1e1b266",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "ae5973b1-d8d8-485f-8de5-2a132f73b59f",
+  "prevId": "1616e1fe-bcc1-4955-a3aa-f36ce1e1b266",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -89,7 +89,7 @@
         },
         "linkhash": {
           "name": "linkhash",
-          "type": "varchar(60)",
+          "type": "varchar(130)",
           "primaryKey": false,
           "notNull": true
         },
