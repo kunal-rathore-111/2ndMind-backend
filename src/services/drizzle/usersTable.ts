@@ -11,9 +11,14 @@ export const createUser = async (username: string, email: string, password: stri
     const hashedPassword = await hashPassword(password);
 
 
-    await db.insert(UsersTable).values({
+    const user = await db.insert(UsersTable).values({
         username, email, password: hashedPassword
+    }).returning({
+        userId: UsersTable.id
     });
+    if (!user[0]?.userId) throw new AppError("Signup failed, Please try again later", 500, "Database Error")
+    return user[0]?.userId;
+
 }
 export const findUser = async (email: string, password: string) => {
     const user = await db.query.UsersTable.findFirst({

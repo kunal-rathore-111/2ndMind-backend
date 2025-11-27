@@ -1,14 +1,16 @@
 
 
-import type { NextFunction, Request, Response } from "express";
+import type { Request, Response } from "express";
 import { dataByShareLinkFunc } from "../services/drizzle/linkTable.js";
-import { addContentDBFunction, deleteContentDBFunction, getContentDBFunction } from "../services/drizzle/contentTable.js";
+import { addContentDBFunction, deleteContentDBFunction, getContentDBFunction, updateContentDBFunction } from "../services/drizzle/contentTable.js";
+import AppError from "../middlewares/appError.js";
 
 
+export const dashboard = async (req: Request, res: Response) => {
 
-export const dashboard = async (req: Request, res: Response, next: NextFunction) => {
-    //@ts-ignore
     const userId = req.userId;
+
+
     const data = await getContentDBFunction(userId);
     res.status(200).json({
         message: "Dashboard loads successfull",
@@ -16,9 +18,11 @@ export const dashboard = async (req: Request, res: Response, next: NextFunction)
     });
 }
 
-const addContent = async (req: Request, res: Response, next: NextFunction) => {
-    //@ts-ignore
+
+const addContent = async (req: Request, res: Response) => {
+
     const userId = req.userId;
+
     await addContentDBFunction(req.body, userId);
     res.status(200).json({
         message: "Content added"
@@ -26,11 +30,22 @@ const addContent = async (req: Request, res: Response, next: NextFunction) => {
 }
 
 const deleteContent = async (req: Request, res: Response) => {
-    //@ts-ignore
     const userId = req.userId;
-    //@ts-ignore
     const contentId = req.contentId;
+
+
     await deleteContentDBFunction({ userId, contentId });
+    return res.status(200).json({
+        message: "Deleted"
+    });
+}
+
+const updateContent = async (req: Request, res: Response) => {
+    const userId = req.userId;
+    const contentId = req.contentId;
+    const newColumnData = req.body;
+
+    await updateContentDBFunction({ userId, contentId, newColumnData });
     return res.status(200).json({
         message: "Deleted"
     });
@@ -38,12 +53,12 @@ const deleteContent = async (req: Request, res: Response) => {
 
 const publicDashboard = async (req: Request, res: Response) => {
     const hash = req.params.share_hash;
-    if (!hash) return 'no hash found';
+    if (!hash) throw new AppError("Link not found", 404, "NotFound");
     const result = await dataByShareLinkFunc(hash);
-    return res.json({
+    return res.status(200).json({
         result
     })
 
 }
 
-export const contentController = { dashboard, addContent, deleteContent, publicDashboard }
+export const contentController = { dashboard, addContent, deleteContent, updateContent, publicDashboard }

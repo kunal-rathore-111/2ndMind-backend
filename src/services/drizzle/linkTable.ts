@@ -43,7 +43,7 @@ export const dataByShareLinkFunc = async (linkHash: string) => {
         where(eq(LinkTable.linkHash, linkHash));
 
     // if userDeleted then it will have nothing(so throw error), or if userExists but no content then due to leftJoin it will contain one row with UsersData and ContnentData one row having null (so if condition fails or skip)
-    if (!data.length) throw new AppError('Not Found', 404, 'NotFound');
+    if (!data.length) throw new AppError('User Not Found', 404, 'NotFound');
 
     // it traverse array of data and every contentdata will stored in contentArray by filtering that the contentdata is not null so empty array if no data found instead null(it helps in frontend while rendering data)
     const contentArray = data.map(d => d.ContentData).filter(d2 => d2 != null);

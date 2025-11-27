@@ -23,13 +23,13 @@ export const addContentDBFunction = async (data: z.infer<typeof contentZodSchema
 }
 
 
-interface objectIdInterface {
+interface deleteContent_DTO {
     userId: string
     contentId: string
 }
 
 export const deleteContentDBFunction = async (
-    { userId, contentId }: objectIdInterface) => {
+    { userId, contentId }: deleteContent_DTO) => {
 
     console.log("\nDB deleteContentDBFunction called\n");
     const d = await db.delete(ContentTable).where(and(
@@ -38,5 +38,27 @@ export const deleteContentDBFunction = async (
     ));
 
     console.log(d);
+
+}
+
+
+
+interface updateContent_DTO extends deleteContent_DTO {
+    userId: string
+    contentId: string,
+    newColumnData: z.infer<typeof contentZodSchema>
+}
+
+
+export const updateContentDBFunction = async (
+    { userId, contentId, newColumnData }: updateContent_DTO) => {
+
+    console.log("\nDB updateContentDBFunction called\n");
+
+
+    await db.update(ContentTable).set(newColumnData).where(and(
+        eq(ContentTable.userId, userId),
+        eq(ContentTable.id, contentId)
+    ));
 
 }

@@ -8,7 +8,6 @@ export const contentZodSchema = z.object({
     type: z.enum(['Twitter', 'Youtube', 'Instagram', 'Other']),
     description: z.string().min(3).max(1000).optional(),
     tags: z.array(z.string().max(50)).optional()
-    //need to validate tags
 });
 
 export const contentValidator = (data: z.infer<typeof contentZodSchema>) => {

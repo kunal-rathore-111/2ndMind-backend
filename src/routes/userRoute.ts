@@ -8,9 +8,10 @@ import { userController } from "../controllers/userController.js";
 
 
 export const user = express();
+
 user.use('/content', authMiddleware, content);
 
 user.get('/dashboard', authMiddleware, contentController.dashboard);
 user.post('/share', authMiddleware, userController.shareLink);
 
-user.get('/:share_hash', contentController.publicDashboard);
+user.get('/public/:share_hash', contentController.publicDashboard);

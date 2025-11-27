@@ -12,6 +12,7 @@ import { requestIdMiddleware } from './middlewares/requestIdMiddleware.js';
 
 import { indexRoute } from './routes/indexRoutes.js';
 import { errorMiddleware } from './middlewares/errorMiddleware.js';
+import { globalLimiter } from './utils/limiter.js';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -19,6 +20,10 @@ const PORT = process.env.PORT || 3001;
 
 app.use(helmet());
 app.use(morgan('dev'));
+
+
+app.use(globalLimiter);
+
 
 const origins = [process.env.Frontend_URL, 'http://localhost:5173'];
 

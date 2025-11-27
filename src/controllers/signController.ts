@@ -10,12 +10,17 @@ export const signUpController = async (req: Request, res: Response) => {
 
     const { username, email, password } = req.body;
     // storing in db 
-    await createUser(username, email, password);
+    const userId = await createUser(username, email, password);
 
-    return res.status(201).json({
-        message: "sign-up successfull",
-        signIn_Url: signIn_Url  // returing url to signup page or may do token gene+ dashboard redirect
-    });
+    const token = createJWT(userId);
+    return res.cookie('token', token, {
+        httpOnly: true,
+        sameSite: process.env.NODE_ENV ? 'none' : 'lax',
+        secure: process.env.NODE_ENV ? true : false,
+    }).status(201).json({
+        message: "Sign-up successfull",
+    });// sending cookie so frontend handles  redirect to dashboard improves UX
+
 }
 
 export const signInController = async (req: Request, res: Response) => {
@@ -23,17 +28,13 @@ export const signInController = async (req: Request, res: Response) => {
     // finding  does user exists in db 
     const result = await findUser(email, password);
 
-    if (result) {
-        const jwtToken = createJWT(result.id); // creating jwt and sending in cookies
-        res.cookie('token', jwtToken, {
-            httpOnly: true, sameSite: "lax", secure: false
-        }).status(200).json({
-            message: "Sign-in successfull"
-        })
-    }
-    else {
-        res.status(401).json({
-            message: "User not found"
-        })
-    }
+    const jwtToken = createJWT(result.id); // creating jwt and sending in cookies
+    res.cookie('token', jwtToken, {
+        httpOnly: true,
+        sameSite: process.env.NODE_ENV ? 'none' : 'lax',
+        secure: process.env.NODE_ENV ? true : false,
+    }).status(200).json({
+        message: "Sign-in successfull"
+    })
+
 }
