@@ -15,7 +15,7 @@ import { errorMiddleware } from './middlewares/errorMiddleware.js';
 import { globalLimiter } from './utils/limiter.js';
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = Number(process.env.PORT) ?? 3000;
 
 
 app.use(helmet());
