@@ -10,7 +10,11 @@ export const signZod = (schema: ZodSchema) => {
 
         if (result.success) return next();
 
-        throw new AppError(`${result?.error?.issues?.[0]?.message}`, 400, 'BadRequest')
+        // Format all validation errors into a readable message
+        const errorMessages = result.error.issues
+            .map(issue => `${issue.path.join('.')}: ${issue.message}`)
+            .join(', ');
+        throw new AppError(errorMessages, 400, 'BadRequest')
 
     }
 }

@@ -15,14 +15,14 @@ import { errorMiddleware } from './middlewares/errorMiddleware.js';
 import { globalLimiter } from './utils/limiter.js';
 
 const app = express();
-const PORT = Number(process.env.PORT) ?? 3000;
+const PORT = Number(process.env.PORT) || 3000;
 
 
 app.use(helmet());
 app.use(morgan('dev'));
 
 
-app.use(globalLimiter);
+//app.use(globalLimiter);
 
 
 const origins = [process.env.Frontend_URL, 'http://localhost:5173'];
@@ -34,7 +34,7 @@ app.use(cors({
         else return callback(new AppError('Invalid Origin', 500, 'CorsError')); // if any other origin return with error
     },
     credentials: true,
-    methods: ['GET', 'POST', 'DELETE'],
+    methods: ['GET', 'POST', 'PATCH', 'DELETE'],
     maxAge: 24 * 60 * 60, // 24 hours browser keep cache
     allowedHeaders: ['Content-Type', 'Authorization'],
 }));

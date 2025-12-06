@@ -1,6 +1,5 @@
 
 import jwt from "jsonwebtoken";
-import mongoose from "mongoose";
 
 const jwtSecret = process.env.JWT_SECRET || "SECRET1.1"; // if no JWT_SECRET in .env then keep SECRET1.1 string as secret
 

@@ -1,16 +1,15 @@
 import type { Request, Response } from "express";
 
 import { createJWT } from "../utils/jwt.js";
-import { signIn_Url } from '../utils/urls.js';
 import { createUser, findUser } from "../services/drizzle/usersTable.js";
 
 
 
 export const signUpController = async (req: Request, res: Response) => {
 
-    const { username, email, password } = req.body;
-    // storing in db 
-    const userId = await createUser(username, email, password);
+    const { email, password } = req.body;
+    // Using email as username - no separate username field needed
+    const userId = await createUser(email, email, password);
 
     const token = createJWT(userId);
     return res.cookie('token', token, {
@@ -37,4 +36,17 @@ export const signInController = async (req: Request, res: Response) => {
         message: "Sign-in successfull"
     })
 
+}
+
+export const logoutController = (req: Request, res: Response) => {
+    // Clear the authentication cookie by setting it with expired date
+
+    res.cookie('token', '', {
+        httpOnly: true,
+        sameSite: process.env.NODE_ENV ? 'none' : 'lax',
+        secure: process.env.NODE_ENV ? true : false,
+        expires: new Date(0), // Set expiration to epoch (Jan 1, 1970) = immediately expired
+    }).status(200).json({
+        message: "Logout successful"
+    });
 }

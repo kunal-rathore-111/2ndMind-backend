@@ -18,7 +18,7 @@ export const addContentDBFunction = async (data: z.infer<typeof contentZodSchema
 
 
     await db.insert(ContentTable).values(
-        { title, description, link, tags, type, userId }  // if discription or tags are undefined then drizzle wrap them as null in database cause they are not defined as notNull in schema
+        { title, description, link, tags, type, userId }  // if description or tags are undefined then drizzle wrap them as null in database cause they are not defined as notNull in schema
     );
 }
 

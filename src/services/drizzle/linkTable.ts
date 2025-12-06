@@ -13,7 +13,15 @@ const hashLink = () => {
 }
 
 export const createShareLinkFunc = async (userId: string) => {
+    // First, check if user already has a share link
+    const existingLink = await db.select().from(LinkTable).where(eq(LinkTable.userId, userId));
 
+    // If link exists, return the existing hash instead of creating a new one
+    if (existingLink.length > 0 && existingLink[0]) {
+        return existingLink[0].linkHash;
+    }
+
+    // If no link exists, create a new one
     const linkHash = hashLink();
     await db.insert(LinkTable).values({
         linkHash,
@@ -28,6 +36,15 @@ export const deleteShareLinkFunc = async (userId: string) => {
     await db.delete(LinkTable).where((eq(LinkTable.userId, userId)));
 }
 
+export const getShareLinkFunc = async (userId: string) => {
+    const existingLink = await db.select().from(LinkTable).where(eq(LinkTable.userId, userId));
+
+    if (existingLink.length > 0 && existingLink[0]) {
+        return existingLink[0].linkHash;
+    }
+
+    return null; // No link exists
+}
 
 
 

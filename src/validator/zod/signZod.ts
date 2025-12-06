@@ -1,10 +1,10 @@
 
-import { regex, z } from 'zod';
+import { z } from 'zod';
 
 
 
 export const signInSchema = z.object({
-    email: z.email().min(4).max(200),
+    email: z.string().email().min(4).max(200),
     password: z.string().
         min(4, { message: "Please increase password length" }).
         max(200, { message: "Please decrease password length" }).
@@ -15,6 +15,6 @@ export const signInSchema = z.object({
 });
 
 
-export const signUpSchema = signInSchema.extend({
-    username: z.string().min(4, { message: "Please increase username length" }).max(200, { message: "Please decrease username length" }),
-})
+// For signup, I use the same schema as signin (email + password)
+// I'll use email as the username in the database
+export const signUpSchema = signInSchema;

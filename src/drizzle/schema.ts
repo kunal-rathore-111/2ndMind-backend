@@ -38,6 +38,8 @@ export const LinkTable = pgTable('linkTable', {
 })
 
 
+//  RELATIONS
+
 export const UsersRelation = relations(UsersTable, ({ one, many }) => {
     return {
         userContent: many(ContentTable),
