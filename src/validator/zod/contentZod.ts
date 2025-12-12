@@ -1,13 +1,13 @@
 
 import { z } from 'zod';
 
+
 export const contentZodSchema = z.object({
-    title: z.string().min(4).max(1000),
-    link: z.url().min(3).max(5000).optional(),
-    type: z.string(),
-    discription: z.string().min(3).max(400).optional(),
-    tags: z.undefined()
-    //need to validate tags
+    title: z.string().min(4).max(100),
+    link: z.url().min(3).max(1000),
+    type: z.enum(['Twitter', 'Youtube', 'Instagram', 'Other']),
+    description: z.string().min(3).max(1000).optional(),
+    tags: z.array(z.string().max(50)).optional()
 });
 
 export const contentValidator = (data: z.infer<typeof contentZodSchema>) => {

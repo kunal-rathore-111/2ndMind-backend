@@ -5,7 +5,11 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon ./dist/index.js",
+    "dev": "nodemon --watch src --ext ts --exec \"tsc && node dist/index.js\"",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "generate": "npx drizzle-kit generate --config drizzle.config/drizzle.config.ts",
+    "migrate": "npx drizzle-kit migrate --config drizzle.config/drizzle.config.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -16,11 +20,14 @@
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
+    "drizzle-orm": "^0.44.7",
     "express": "^5.1.0",
+    "express-rate-limit": "^8.2.1",
+    "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.19.1",
     "morgan": "^1.10.1",
     "nodemon": "^3.1.10",
+    "postgres": "^3.4.7",
     "zod": "^4.1.12"
   },
   "devDependencies": {
@@ -31,6 +38,8 @@
     "@types/express": "^5.0.3",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/morgan": "^1.9.10",
+    "@types/node": "^24.10.1",
+    "drizzle-kit": "^0.31.7",
     "typescript": "^5.9.3"
   }
 }

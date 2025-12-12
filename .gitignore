@@ -5,3 +5,7 @@ dist/
 *.tsbuildinfo
 .env
 .vscode/
+
+drizzle.config/*.map
+drizzle.config/*.js
+drizzle.config/*.d.ts

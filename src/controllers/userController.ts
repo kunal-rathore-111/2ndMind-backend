@@ -1,11 +1,12 @@
 import type { Request, Response } from "express";
-import { createShareLinkFunc, deleteShareLinkFunc } from "../services/linkModel.js";
+import { createShareLinkFunc, deleteShareLinkFunc, getShareLinkFunc } from "../services/drizzle/linkTable.js";
+
 
 
 const shareLink = async (req: Request, res: Response) => {
 
     const share = req.body.share;
-    //@ts-ignore
+
     const userId = req.userId;
     console.log(userId);
     if (share) {
@@ -18,4 +19,17 @@ const shareLink = async (req: Request, res: Response) => {
     }
 }
 
-export const userController = { shareLink };
+const getShareLink = async (req: Request, res: Response) => {
+
+    const userId = req.userId;
+
+    const shareHash = await getShareLinkFunc(userId);
+
+    if (shareHash) {
+        res.json({ exists: true, hash: shareHash });
+    } else {
+        res.json({ exists: false, hash: null });
+    }
+}
+
+export const userController = { shareLink, getShareLink };

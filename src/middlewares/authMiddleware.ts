@@ -1,16 +1,16 @@
 
 import type { Request, Response, NextFunction } from "express";
 import { checkJWT } from "../utils/jwt.js";
+import AppError from "./appError.js";
 
 export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
 
     const token = req?.cookies?.token;
-    if (!token) return res.status(403).json({ message: "You're not logged-in" })
+    if (!token) throw new AppError("Please Login-again", 401, "Unauthorized");
     const decodeOp = checkJWT(token);
     if (decodeOp) {
-        //@ts-ignore
         req.userId = decodeOp.id;
         next();
     }
-    else return res.status(401).json({ message: "Invalid token, Please login again" });  // need to handle jwt errors using global middleware
+    else throw new AppError("Please Login-again", 401, "Unauthorized");
 }
