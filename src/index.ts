@@ -48,7 +48,7 @@ indexRoute.get("/", (req, res) => {
     res.json({ message: "Hii from inital route" });
 })
 
-app.use('/app/v1', requestIdMiddleware, indexRoute);
+app.use('/app/v2', requestIdMiddleware, indexRoute);
 
 app.use(errorMiddleware);
 
