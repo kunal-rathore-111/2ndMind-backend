@@ -41,11 +41,9 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 
-
-
-//inital route
-indexRoute.get("/", (req, res) => {
-    res.json({ message: "Hii from inital route" });
+//initial route
+app.get("/", (req, res) => {
+    res.json({ message: "Hii from initial route" });
 })
 
 app.use('/app/v2', requestIdMiddleware, indexRoute);
