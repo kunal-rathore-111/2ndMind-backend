@@ -10,8 +10,4 @@ export const indexRoute = express();
 indexRoute.use('/', sign);
 indexRoute.use('/user', user);
 
-//inital route
-indexRoute.get("/", (req, res) => {
-    res.json({ message: "Hii from inital route" });
-})
 

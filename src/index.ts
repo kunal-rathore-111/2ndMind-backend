@@ -43,6 +43,10 @@ app.use(cookieParser());
 
 
 
+//inital route
+indexRoute.get("/", (req, res) => {
+    res.json({ message: "Hii from inital route" });
+})
 
 app.use('/app/v1', requestIdMiddleware, indexRoute);
 
