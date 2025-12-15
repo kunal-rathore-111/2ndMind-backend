@@ -15,6 +15,13 @@
       "when": 1764170946914,
       "tag": "0001_gigantic_obadiah_stane",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1765816223842,
+      "tag": "0002_cute_drax",
+      "breakpoints": true
     }
   ]
 }
