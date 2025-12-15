@@ -39,8 +39,4 @@
     "moduleDetection": "force",
     "skipLibCheck": true,
   },
-  // Only compile backend code
-  "include": [
-    "src"
-  ]
 }

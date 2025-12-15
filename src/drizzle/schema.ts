@@ -22,7 +22,9 @@ export const ContentTable = pgTable("contentTable", {
     link: varchar('link', { length: 1000 }).notNull(),
     type: contentType().default('Other').notNull(),
     tags: varchar('tags', { length: 50 }).array(),
-    userId: uuid('userId').references(() => UsersTable.id, { onDelete: "cascade" }).notNull()
+    userId: uuid('userId').references(() => UsersTable.id, { onDelete: "cascade" }).notNull(),
+    createdAt: timestamp('createdAt').defaultNow().notNull(),
+    updatedAt: timestamp('updatedAt').defaultNow().notNull(),
 })
 
 
