@@ -13,9 +13,9 @@ export const contentZod_MW = (req: Request, res: Response, next: NextFunction) =
 
 export const Content_MW = (req: Request, res: Response, next: NextFunction) => {
 
-    const contentId = req.params.contentId;
+    const contentId = Array.isArray(req.params.contentId) ? req.params.contentId[0] : req.params.contentId;
     if (!contentId) {
-        throw new AppError("contendId not found", 404, 'NotFound');
+        throw new AppError("Content Id not found", 404, 'NotFound');
     }
     req.contentId = contentId;
     return next();

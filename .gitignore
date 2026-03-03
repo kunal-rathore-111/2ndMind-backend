@@ -1,11 +1,10 @@
 
 node_modules/
-
 dist/
 *.tsbuildinfo
 .env
 .vscode/
-
+./dist
 drizzle.config/*.map
 drizzle.config/*.js
 drizzle.config/*.d.ts

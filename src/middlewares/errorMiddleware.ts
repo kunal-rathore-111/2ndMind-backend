@@ -14,49 +14,8 @@ export const errorMiddleware: ErrorRequestHandler = (err, req, res, next) => {
 
     let requestId = req?.requestId || 'unknown';
 
-    const sqlCode = typeof err?.code === "string" && err.code || typeof err?.cause?.code === "string" && err.cause.code;
 
-    if (['23505', '23503', '22P02'].includes(sqlCode || '')) { /* use sqlCode in switch */ }
-
-    if (sqlCode) {
-        // Fallback- handle Postgres SQLSTATE error codes if they surface
-        // creating the constraint original columns
-        const constraint_fieldMap: Record<string, string> = {
-            usersTable_email_unique: 'email',
-            linkTable_userId_unique: 'link'
-        }
-        switch (sqlCode) {
-            case '23505': // unique_violation
-                statusCode = 409;
-                errorType = 'Conflict';
-                const constraint = err?.cause?.constraint_name || "value";
-                const field = constraint_fieldMap[constraint] || 'value'
-
-                message = `${field} already exists`;
-                shouldShown = true;
-                break;
-            case '23503': // foreign_key_violation
-                statusCode = 409;
-                errorType = 'ForeignKeyViolation';
-                message = 'Foreign key constraint violation';
-                shouldShown = true;
-                break;
-            case '22P02': // invalid_text_representation (e.g. bad UUID)
-                statusCode = 400;
-                errorType = 'BadRequest';
-                message = 'Invalid input syntax';
-                shouldShown = true;
-                break;
-            default:
-                // leave defaults
-                errorType = 'DB error'
-                message = err?.message || message;
-                shouldShown = true;
-                break;
-        }
-    }
-
-    // Drizzle errors (query/validation)
+    // Drizzle errors like query or validation
     if (err?.name === 'DrizzleError') {
         statusCode = Math.max(400, statusCode);
         errorType = 'BadRequest';
@@ -66,13 +25,13 @@ export const errorMiddleware: ErrorRequestHandler = (err, req, res, next) => {
 
 
     //jwt errors
-    if (err?.name === 'JsonWebTokenError') {
+    else if (err?.name === 'JsonWebTokenError') {
         statusCode = 401;
         errorType = 'Unauthorized';
         message = 'Invalid token';
         shouldShown = true;
     }
-    if (err?.name === 'TokenExpiredError') {
+    else if (err?.name === 'TokenExpiredError') {
         statusCode = 401;
         errorType = 'Unauthorized';
         message = 'Token expired';
@@ -81,15 +40,17 @@ export const errorMiddleware: ErrorRequestHandler = (err, req, res, next) => {
 
     const originalStatus = Number(err?.statusCode || err?.status || 500);
     const isServerError = originalStatus >= 500;
+    // hard coding the server side error with status code 500
     const responseStatus = isServerError ? 500 : originalStatus;
 
-    // to use in both clientside and serverside errors
+    // common func. to use in both clientside and serverside errors
     function showErrors() {
         console.error('requestId: ', requestId);
         console.error('statusCode: ', statusCode);
         console.error('errorType: ', errorType);
         console.error('Message: ', message);
 
+        // full log for server side error
         if (isServerError) {
             console.error('Stack:', err?.stack);
             console.error("\n\n\nCOMPLETE Error-\n", err)
@@ -109,12 +70,11 @@ export const errorMiddleware: ErrorRequestHandler = (err, req, res, next) => {
     }
 
 
-
+    // if in production and the error was server error and the error is something except the all above possiblites then hard code the message to show to end user
     if (isProduction && isServerError && !shouldShown) {
         statusCode = 500;
         errorType = 'ServerError';
         message = "Something went wrong"
-
     }
 
     res.status(responseStatus).json({

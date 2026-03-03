@@ -2,8 +2,11 @@ import type { Request, Response, NextFunction } from "express";
 
 import AppError from "./appError.js";
 import type { ZodSchema } from "zod";
+
 // middleware factory= middleware inside function
+// doing the below thing (returing middleware in function)to pass the diff. schema in route like signup has different signin has different 
 export const signZod = (schema: ZodSchema) => {
+
     return (req: Request, res: Response, next: NextFunction) => {
 
         const result = schema.safeParse(req.body);
@@ -14,6 +17,7 @@ export const signZod = (schema: ZodSchema) => {
         const errorMessages = result.error.issues
             .map(issue => `${issue.path.join('.')}: ${issue.message}`)
             .join(', ');
+
         throw new AppError(errorMessages, 400, 'BadRequest')
 
     }

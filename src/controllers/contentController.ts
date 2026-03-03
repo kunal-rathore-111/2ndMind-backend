@@ -52,7 +52,7 @@ const updateContent = async (req: Request, res: Response) => {
 }
 
 const publicDashboard = async (req: Request, res: Response) => {
-    const hash = req.params.share_hash;
+    const hash = Array.isArray(req.params.share_hash) ? req.params.share_hash[0] : req.params.share_hash;
     if (!hash) throw new AppError("Link not found", 404, "NotFound");
     const result = await dataByShareLinkFunc(hash);
     return res.status(200).json({
