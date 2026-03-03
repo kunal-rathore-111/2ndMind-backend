@@ -10,7 +10,7 @@ import { signLimiter } from "../utils/limiter.js";
 
 export const sign = express();
 
-//sign.use(signLimiter)  
+process.env.NODE_ENV === "production" && sign.use(signLimiter);
 
 // sign-up route
 sign.post('/sign-up', signZod(signUpSchema), signUpController);

@@ -8,9 +8,9 @@
         "dev": "nodemon --watch src --ext ts --exec \"tsc -b && bun ./dist/index.js\"",
         "build": "tsc -b",
         "start": "bun dist/index.js",
-        "generate": "bunx drizzle-kit generate --config drizzle.config/drizzle.config.ts",
-        "migrate": "bunx drizzle-kit migrate --config drizzle.config/drizzle.config.ts",
-        "push": "bunx drizzle-kit push --config drizzle.config/drizzle.config.ts",
+        "generatee": "bunx drizzle-kit generate --config ./src/drizzle/drizzle.config/drizzle.config.ts",
+        "migratee": "bunx drizzle-kit migrate --config ./src/drizzle/drizzle.config/drizzle.config.ts",
+        "pushh": "--config ./src/drizzle/drizzle.config/drizzle.config.ts",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "keywords": [],
