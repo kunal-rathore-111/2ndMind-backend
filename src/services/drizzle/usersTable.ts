@@ -33,3 +33,11 @@ export const findUser = async (email: string, password: string) => {
     )
     return user;
 }
+
+export const deleteUser = async (email: string, password: string) => {
+
+    // first find user with the email and password, if found then delete
+    const user = await findUser(email, password);
+    return await db.delete(UsersTable).where(eq(UsersTable.id, user.id)).returning();
+
+}

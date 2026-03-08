@@ -1,10 +1,10 @@
 
 import express from "express";
-import { authMiddleware } from "../middlewares/authMiddleware";
+import { authMiddleware } from "../../middlewares/authMiddleware";
 
 import { content } from "./contentRoute";
-import { contentController } from "../controllers/contentController";
-import { userController } from "../controllers/userController";
+import { contentController } from "../../controllers/contentController";
+import { userController } from "../../controllers/userController";
 import { userAccount } from "./userAccountRoute";
 
 

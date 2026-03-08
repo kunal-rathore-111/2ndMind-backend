@@ -2,7 +2,7 @@
 import express from "express";
 
 import { sign } from "./signRoute"
-import { user } from "./userRoute"
+import { user } from "./user/userIndexRoute"
 
 export const indexRoute = express();
 

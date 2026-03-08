@@ -8,7 +8,7 @@ import cookieParser from 'cookie-parser';
 
 import { requestIdMiddleware } from './middlewares/requestIdMiddleware';
 
-import { indexRoute } from './routes/indexRoutes';
+import { indexRoute } from './routes/indexRoute';
 import { errorMiddleware } from './middlewares/errorMiddleware';
 
 
