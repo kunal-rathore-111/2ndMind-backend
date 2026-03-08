@@ -1,9 +1,9 @@
 
 
 import type { Request, Response } from "express";
-import { dataByShareLinkFunc } from "../services/drizzle/linkTable.js";
-import { addContentDBFunction, deleteContentDBFunction, getContentDBFunction, updateContentDBFunction } from "../services/drizzle/contentTable.js";
-import AppError from "../middlewares/appError.js";
+import { dataByShareLinkFunc } from "../services/drizzle/userShareLinkTable";
+import { addContentDBFunction, deleteContentDBFunction, getContentDBFunction, updateContentDBFunction } from "../services/drizzle/contentTable";
+import AppError from "../middlewares/appError";
 
 
 export const dashboard = async (req: Request, res: Response) => {

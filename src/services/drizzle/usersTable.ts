@@ -1,7 +1,7 @@
-import { db } from "../../config/dbDrizzle.js";
-import { UsersTable } from "../../drizzle/schema.js";
-import AppError from "../../middlewares/appError.js";
-import { decodePassword, hashPassword } from "../../utils/hashFunc.js"
+import { db } from "../../config/dbDrizzle";
+import { UsersTable } from "../../drizzle/schema";
+import AppError from "../../middlewares/appError";
+import { decodePassword, hashPassword } from "../../utils/hashFunc"
 import { eq } from 'drizzle-orm';
 
 

@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
 
-import AppError from "./appError.js";
+import AppError from "./appError";
 import type { ZodSchema } from "zod";
 
 // middleware factory= middleware inside function

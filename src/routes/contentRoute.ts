@@ -1,7 +1,7 @@
 
 import express from "express";
-import { contentController } from "../controllers/contentController.js";
-import { contentZod_MW, Content_MW } from "../middlewares/contentMiddleware.js";
+import { contentController } from "../controllers/contentController";
+import { contentZod_MW, Content_MW } from "../middlewares/contentMiddleware";
 
 export const content = express();
 

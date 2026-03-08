@@ -1,7 +1,7 @@
 import postgres from "postgres";
-import AppError from "../middlewares/appError.js";
+import AppError from "../middlewares/appError";
 import { drizzle } from "drizzle-orm/postgres-js";
-import * as schema from '../drizzle/schema.js';
+import * as schema from '../drizzle/schema';
 
 
 const databaseUrl = process.env.DATABASE_URL;

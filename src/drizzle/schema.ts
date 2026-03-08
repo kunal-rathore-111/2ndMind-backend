@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { pgEnum, pgTable, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
+import { pgEnum, pgTable, text, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
 
 
 
@@ -9,20 +9,20 @@ export const UsersTable = pgTable('usersTable', {
     email: varchar('email', { length: 400 }).notNull().unique(),
     password: varchar('password', { length: 60 }).notNull(),
     createdAt: timestamp('createdAt').defaultNow().notNull(),
-    updatedAt: timestamp('updatedAt').defaultNow().notNull()
+    updatedAt: timestamp('updatedAt').defaultNow().notNull(),
+    // profile soon
 });
 
-
-export const contentType = pgEnum('contentType', ['Twitter', 'Youtube', 'Instagram', 'Other']);
+export const contentCategory = pgEnum("contentCategory", ["Development", "Finance", "Study", "Social", "GitHub", "Exams", "AI", "Research", "Design", "Others"])
 
 export const ContentTable = pgTable("contentTable", {
     id: uuid('id').primaryKey().defaultRandom(),
-    title: varchar('title', { length: 100 }).notNull(),
+    title: text('title').notNull(),
     description: varchar('description', { length: 1000 }),
-    link: varchar('link', { length: 1000 }).notNull(),
-    type: contentType().default('Other').notNull(),
+    link: text('link').notNull(),
+    type: contentCategory().default('Others').notNull(),
     tags: varchar('tags', { length: 50 }).array(),
-    userId: uuid('userId').references(() => UsersTable.id, { onDelete: "cascade" }).notNull()
+    userId: uuid('userId').references(() => UsersTable.id, { onDelete: "cascade" }).notNull().unique()
 })
 
 
@@ -31,19 +31,26 @@ export const tagsTable = pgTable('tagsTable', { // for vector search
     tags: varchar('tags', { length: 60 }).notNull().unique()
 })
 
-export const LinkTable = pgTable('linkTable', {
+export const UserShareLinkTable = pgTable('UserShareLinkTable', {
     id: uuid('id').primaryKey().defaultRandom(),
-    linkHash: varchar('linkhash', { length: 130 }).notNull(),
-    userId: uuid('userId').notNull().references(() => UsersTable.id, { onDelete: 'cascade' }).unique()
+    linkHash: text('linkhash').notNull(),
+    userId: uuid('userId').notNull().references(() => UsersTable.id, { onDelete: 'cascade' })
+})
+
+// contentLink
+export const ContentShareLinkTable = pgTable("ContentShareLinkTable", {
+    id: uuid("id").primaryKey().defaultRandom(),
+    contentSharehash: text("contentShareHash").notNull(),
+    contentId: uuid("contentId").references(() => ContentTable.id, { onDelete: "cascade" }).notNull().unique()  // one content will have one share link
 })
 
 
-//  RELATIONS
 
+//  RELATIONS
 export const UsersRelation = relations(UsersTable, ({ one, many }) => {
     return {
         userContent: many(ContentTable),
-        userLink: one(LinkTable)
+        userLink: one(UserShareLinkTable)
     }
 })
 
@@ -52,15 +59,25 @@ export const ContentRelation = relations(ContentTable, ({ one }) => {
         user: one(UsersTable, {
             fields: [ContentTable.userId],
             references: [UsersTable.id]
+        }),
+        contentLink: one(ContentShareLinkTable)
+    }
+})
+
+export const UserLinkRelation = relations(UserShareLinkTable, ({ one }) => {
+    return {
+        user: one(UsersTable, {
+            fields: [UserShareLinkTable.userId],
+            references: [UsersTable.id]
         })
     }
 })
 
-export const LinkRelation = relations(LinkTable, ({ one }) => {
+export const ContentLinkRelation = relations(ContentShareLinkTable, ({ one }) => {
     return {
-        user: one(UsersTable, {
-            fields: [LinkTable.userId],
-            references: [UsersTable.id]
+        content: one(ContentTable, {
+            fields: [ContentShareLinkTable.contentId],
+            references: [ContentTable.id]
         })
     }
 })

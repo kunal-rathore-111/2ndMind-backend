@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import { createShareLinkFunc, deleteShareLinkFunc, getShareLinkFunc } from "../services/drizzle/linkTable.js";
+import { createShareLinkFunc, deleteShareLinkFunc, getShareLinkFunc } from "../services/drizzle/userShareLinkTable";
 
 
 

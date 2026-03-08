@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
-import { contentValidator } from "../validator/zod/contentZod.js";
-import AppError from "./appError.js";
+import { contentValidator } from "../validator/zod/contentZod";
+import AppError from "./appError";
 
 // content zod validation
 export const contentZod_MW = (req: Request, res: Response, next: NextFunction) => {

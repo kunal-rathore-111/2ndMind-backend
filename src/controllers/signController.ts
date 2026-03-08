@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
 
-import { createJWT } from "../utils/jwt.js";
-import { createUser, findUser } from "../services/drizzle/usersTable.js";
+import { createJWT } from "../utils/jwt";
+import { createUser, findUser } from "../services/drizzle/usersTable";
 
 
 
@@ -38,15 +38,15 @@ export const signInController = async (req: Request, res: Response) => {
 
 }
 
-export const logoutController = (req: Request, res: Response) => {
+export const signOutController = (req: Request, res: Response) => {
     // Clear the authentication cookie by setting it with expired date
 
     res.cookie('token', '', {
         httpOnly: true,
         sameSite: process.env.NODE_ENV === "production" ? 'none' : 'lax',
         secure: process.env.NODE_ENV === "production" ? true : false,
-        expires: new Date(0), // Set expiration to epoch (Jan 1, 1970) = immediately expired
+        expires: new Date(0), // Set expiration to (Jan 1, 1970) = immediately expired
     }).status(200).json({
-        message: "Logout successful"
+        message: "Signout successful"
     });
 }

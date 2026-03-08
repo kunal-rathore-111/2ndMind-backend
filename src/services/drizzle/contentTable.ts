@@ -1,8 +1,8 @@
 import { and, eq } from "drizzle-orm";
-import { db } from "../../config/dbDrizzle.js";
-import { ContentTable } from "../../drizzle/schema.js";
+import { db } from "../../config/dbDrizzle";
+import { ContentTable } from "../../drizzle/schema";
 import type { z } from "zod";
-import type { contentZodSchema } from "../../validator/zod/contentZod.js";
+import type { contentZodSchema } from "../../validator/zod/contentZod";
 
 
 export const getContentDBFunction = async (userId: string) => {
