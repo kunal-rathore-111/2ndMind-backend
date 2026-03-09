@@ -2,7 +2,7 @@
 
 import type { Request, Response } from "express";
 import { dataByShareLinkFunc } from "../services/drizzle/userShareLinkTable";
-import { addContentDBFunction, deleteContentDBFunction, getContentDBFunction, updateContentDBFunction } from "../services/drizzle/contentTable";
+import { addContentService, deleteContentService, getContentService, updateContentService } from "../services/drizzle/contentTable";
 import AppError from "../middlewares/appError";
 
 
@@ -11,7 +11,7 @@ export const dashboard = async (req: Request, res: Response) => {
     const userId = req.userId;
 
 
-    const data = await getContentDBFunction(userId);
+    const data = await getContentService(userId);
     res.status(200).json({
         message: "Dashboard loads successfull",
         data
@@ -23,7 +23,7 @@ const addContent = async (req: Request, res: Response) => {
 
     const userId = req.userId;
 
-    await addContentDBFunction(req.body, userId);
+    await addContentService(req.body, userId);
     res.status(200).json({
         message: "Content added"
     });
@@ -34,7 +34,7 @@ const deleteContent = async (req: Request, res: Response) => {
     const contentId = req.contentId;
 
 
-    await deleteContentDBFunction({ userId, contentId });
+    await deleteContentService({ userId, contentId });
     return res.status(200).json({
         message: "Deleted"
     });
@@ -45,7 +45,7 @@ const updateContent = async (req: Request, res: Response) => {
     const contentId = req.contentId;
     const newColumnData = req.body;
 
-    await updateContentDBFunction({ userId, contentId, newColumnData });
+    await updateContentService({ userId, contentId, newColumnData });
     return res.status(200).json({
         message: "Deleted"
     });

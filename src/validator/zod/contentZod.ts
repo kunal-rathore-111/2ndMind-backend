@@ -6,7 +6,7 @@ const contentCategoryZod = z.enum(["Development", "Finance", "Study", "Social", 
 export const contentZodSchema = z.object({
     title: z.string().min(4).max(100),
     link: z.url().min(3).max(1000),
-    type: contentCategoryZod,
+    category: contentCategoryZod,
     description: z.string().min(3).max(1000).optional(),
     tags: z.array(z.string().max(50)).optional()
 });

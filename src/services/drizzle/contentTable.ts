@@ -5,20 +5,20 @@ import type { z } from "zod";
 import type { contentZodSchema } from "../../validator/zod/contentZod";
 
 
-export const getContentDBFunction = async (userId: string) => {
+export const getContentService = async (userId: string) => {
     return await db.query.ContentTable.findMany({
         where: eq(ContentTable.userId, userId)
     })
 }
 
-export const addContentDBFunction = async (data: z.infer<typeof contentZodSchema>, userId: string) => {
-    let { title, description, link, tags, type } = data;
+export const addContentService = async (data: z.infer<typeof contentZodSchema>, userId: string) => {
 
+    const { title, description, link, tags, category } = data;
     console.log("\nDB addContentDBFunction called\n");
 
 
     await db.insert(ContentTable).values(
-        { title, description, link, tags, type, userId }  // if description or tags are undefined then drizzle wrap them as null in database cause they are not defined as notNull in schema
+        { title, description, link, tags, category, userId }  // if description or tags are undefined then drizzle wrap them as null in database cause they are not defined as notNull in schema
     );
 }
 
@@ -28,7 +28,7 @@ interface deleteContent_DTO {
     contentId: string
 }
 
-export const deleteContentDBFunction = async (
+export const deleteContentService = async (
     { userId, contentId }: deleteContent_DTO) => {
 
     console.log("\nDB deleteContentDBFunction called\n");
@@ -50,7 +50,7 @@ interface updateContent_DTO extends deleteContent_DTO {
 }
 
 
-export const updateContentDBFunction = async (
+export const updateContentService = async (
     { userId, contentId, newColumnData }: updateContent_DTO) => {
 
     console.log("\nDB updateContentDBFunction called\n");

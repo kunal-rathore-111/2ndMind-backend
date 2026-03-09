@@ -1,19 +1,32 @@
 import type { Request, Response } from "express"
-import { deleteUser } from "../services/drizzle/usersTable";
+import { deleteAccountService, updatePasswordService } from "../services/drizzle/usersTable";
 import AppError from "../middlewares/appError";
 
 
 const deleteAccount = async (req: Request, res: Response) => {
 
     const { email, password } = req.body;
-    const result = await deleteUser(email, password);
+
+    const result = await deleteAccountService({ email, password });
 
     if (result.length === 0) {
-        throw new AppError("User not deleted, please try again", 500, "InternalError")
+        throw new AppError("Account not deleted, please try again", 500, "InternalError")
     }
-    return res.send({ message: "Account deleted successfully" });
+    return res.status(200).send({ message: "Account deleted successfully" });
+
+}
+const updatePassword = async (req: Request, res: Response) => {
+
+    const { email, password, newPassword } = req.body;
+
+    const result = await updatePasswordService({ email, password, newPassword });
+    if (!result) {
+        throw new AppError("User password update request failed, please try again", 500, "InternalError")
+    }
+    return res.status(200).send({ message: "Password updated successfully" });
+
 
 }
 
 
-export const accountController = { deleteAccount };
+export const accountController = { deleteAccount, updatePassword };

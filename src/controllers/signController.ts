@@ -9,7 +9,7 @@ export const signUpController = async (req: Request, res: Response) => {
 
     const { email, username, password } = req.body;
     // Using email as username - no separate username field needed
-    const userId = await createUser(email, username, password);
+    const userId = await createUser({ email, username, password });
 
     const token = createJWT(userId, username);
     return res.cookie('token', token, {
@@ -25,7 +25,7 @@ export const signUpController = async (req: Request, res: Response) => {
 export const signInController = async (req: Request, res: Response) => {
     const { email, password } = req.body;
     // finding  does user exists in db 
-    const result = await findUser(email, password);
+    const result = await findUser({ email, password });
 
     const jwtToken = createJWT(result.id, result.username); // creating jwt and sending in cookies
     res.cookie('token', jwtToken, {

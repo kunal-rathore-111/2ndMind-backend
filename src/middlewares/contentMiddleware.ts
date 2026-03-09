@@ -4,12 +4,15 @@ import AppError from "./appError";
 
 // content zod validation
 export const contentZod_MW = (req: Request, res: Response, next: NextFunction) => {
-    const result = contentValidator(req.body);
-    if (result.success) return next();
-    else throw new AppError(`${result?.error?.issues?.[0]?.message}`, 400, 'BadRequest')
+
+    const validation = contentValidator(req.body);
+
+    if (validation.success) return next();
+    else throw new AppError
+        (validation?.error?.issues?.map((i) => i.message).join(",")
+            || "Invalid value", 400, 'BadRequest')
 }
 
-// content delete route contentId validation
 
 export const Content_MW = (req: Request, res: Response, next: NextFunction) => {
 

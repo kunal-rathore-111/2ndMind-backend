@@ -19,8 +19,8 @@ export const ContentTable = pgTable("contentTable", {
     id: uuid('id').primaryKey().defaultRandom(),
     title: text('title').notNull(),
     description: varchar('description', { length: 1000 }),
-    link: text('link').notNull(),
-    type: contentCategory().default('Others').notNull(),
+    link: text('link').unique(),
+    category: contentCategory().default('Others').notNull(),
     tags: varchar('tags', { length: 50 }).array(),
     userId: uuid('userId').references(() => UsersTable.id, { onDelete: "cascade" }).notNull().unique()
 })
