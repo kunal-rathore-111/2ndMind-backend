@@ -35,9 +35,10 @@ export const deleteContentService = async (
     const d = await db.delete(ContentTable).where(and(
         eq(ContentTable.userId, userId),
         eq(ContentTable.id, contentId)
-    ));
+    )).returning({ userId: ContentTable.userId });
 
     console.log(d);
+    return d;
 
 }
 

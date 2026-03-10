@@ -33,11 +33,17 @@ const deleteContent = async (req: Request, res: Response) => {
     const userId = req.userId;
     const contentId = req.contentId;
 
+    const result = await deleteContentService({ userId, contentId });
+    // handles if content deleted -- because drizzle throwing error if no data found on deleting 
+    if (result[0]?.userId) {
+        return res.status(200).json({
+            message: "Deleted"
+        });
+    }
+    else {
+        throw new AppError("Content not found", 404, "Not found")
+    }
 
-    await deleteContentService({ userId, contentId });
-    return res.status(200).json({
-        message: "Deleted"
-    });
 }
 
 const updateContent = async (req: Request, res: Response) => {
