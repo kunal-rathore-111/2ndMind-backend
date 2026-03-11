@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { pgEnum, pgTable, text, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
+import { index, pgEnum, pgTable, text, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
 
 
 
@@ -22,8 +22,11 @@ export const ContentTable = pgTable("contentTable", {
     link: text('link').unique(),
     category: contentCategory().default('Others').notNull(),
     tags: varchar('tags', { length: 50 }).array(),
-    userId: uuid('userId').references(() => UsersTable.id, { onDelete: "cascade" }).notNull().unique()
-})
+    userId: uuid('userId').references(() => UsersTable.id, { onDelete: "cascade" }).notNull()
+},
+    (ContentTable) => ({
+        userIndex: index('userIndex').on(ContentTable.userId)
+    }))
 
 
 export const tagsTable = pgTable('tagsTable', { // for vector search

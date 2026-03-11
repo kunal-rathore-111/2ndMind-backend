@@ -1,14 +1,14 @@
 import { and, eq } from "drizzle-orm";
 import { db } from "../../config/dbDrizzle";
-import { ContentTable } from "../../drizzle/schema";
+import { ContentShareLinkTable, ContentTable } from "../../drizzle/schema";
 import type { z } from "zod";
 import type { contentZodSchema } from "../../validator/zod/contentZod";
 
 
 export const getContentService = async (userId: string) => {
-    return await db.query.ContentTable.findMany({
-        where: eq(ContentTable.userId, userId)
-    })
+    const data = await db.select().from(ContentTable).leftJoin(ContentShareLinkTable, eq(ContentShareLinkTable.contentId, ContentTable.id)).where(eq(ContentTable.userId, userId));
+    console.log("\n\n\n", data, "\n\n\n");
+    return data;
 }
 
 export const addContentService = async (data: z.infer<typeof contentZodSchema>, userId: string) => {

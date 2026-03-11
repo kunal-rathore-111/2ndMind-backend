@@ -3,7 +3,7 @@ import { createShareLinkFunc, deleteShareLinkFunc, getShareLinkFunc } from "../s
 
 
 
-const shareLink = async (req: Request, res: Response) => {
+const createORdeleteUserShareLink = async (req: Request, res: Response) => {
 
     const share = req.body.share;
 
@@ -11,7 +11,7 @@ const shareLink = async (req: Request, res: Response) => {
     console.log(userId);
     if (share) {
         const shareHash = await createShareLinkFunc(userId);
-        res.json({ hash: shareHash })
+        return res.json({ hash: shareHash })
     }
     else {
         await deleteShareLinkFunc(userId);
@@ -19,17 +19,17 @@ const shareLink = async (req: Request, res: Response) => {
     }
 }
 
-const getShareLink = async (req: Request, res: Response) => {
+const getUserShareLink = async (req: Request, res: Response) => {
 
     const userId = req.userId;
 
     const shareHash = await getShareLinkFunc(userId);
 
     if (shareHash) {
-        res.json({ exists: true, hash: shareHash });
+        return res.json({ exists: true, hash: shareHash });
     } else {
-        res.json({ exists: false, hash: null });
+        return res.json({ exists: false, hash: null });
     }
 }
 
-export const userController = { shareLink, getShareLink };
+export const userController = { createORdeleteUserShareLink, getUserShareLink };

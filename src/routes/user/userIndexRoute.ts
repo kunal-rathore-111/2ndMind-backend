@@ -4,7 +4,7 @@ import { authMiddleware } from "../../middlewares/authMiddleware";
 
 import { content } from "./contentRoute";
 import { contentController } from "../../controllers/contentController";
-import { userController } from "../../controllers/userController";
+import { userController } from "../../controllers/userShareController";
 import { userAccount } from "./userAccountRoute";
 
 
@@ -16,9 +16,9 @@ user.use('/account', authMiddleware, userAccount);
 
 user.get('/dashboard', authMiddleware, contentController.dashboard);
 
-user.get('/share', authMiddleware, userController.getShareLink); // GET: Check if share link exists
+user.get('/share', authMiddleware, userController.getUserShareLink); // GET: Check if share link exists and return shareHash
 
-user.post('/share', authMiddleware, userController.shareLink); // POST: Create or delete share link
+user.post('/share', authMiddleware, userController.createORdeleteUserShareLink); // POST: Create or delete share link on the basis of existence in db
 
 user.get('/public/:share_hash', contentController.publicDashboard);
 

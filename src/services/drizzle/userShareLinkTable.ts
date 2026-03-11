@@ -32,7 +32,6 @@ export const createShareLinkFunc = async (userId: string) => {
 
 
 export const deleteShareLinkFunc = async (userId: string) => {
-
     await db.delete(UserShareLinkTable).where((eq(UserShareLinkTable.userId, userId)));
 }
 
