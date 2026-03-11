@@ -8,7 +8,8 @@ export const contentZodSchema = z.object({
     link: z.url().min(3).max(1000),
     category: contentCategoryZod,
     description: z.string().min(3).max(1000).optional(),
-    tags: z.array(z.string().max(50)).optional()
+    tags: z.array(z.string().max(50)).optional(),
+    share: z.boolean().optional()
 });
 
 export const contentValidator = (data: z.infer<typeof contentZodSchema>) => {

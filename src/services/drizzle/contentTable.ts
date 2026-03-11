@@ -3,6 +3,8 @@ import { db } from "../../config/dbDrizzle";
 import { ContentShareLinkTable, ContentTable } from "../../drizzle/schema";
 import type { z } from "zod";
 import type { contentZodSchema } from "../../validator/zod/contentZod";
+import { createContentShareLinkFunc } from "./contentShareLinkTable";
+import AppError from "../../middlewares/appError";
 
 
 export const getContentService = async (userId: string) => {
@@ -13,13 +15,23 @@ export const getContentService = async (userId: string) => {
 
 export const addContentService = async (data: z.infer<typeof contentZodSchema>, userId: string) => {
 
-    const { title, description, link, tags, category } = data;
+    const { title, description, link, tags, category, share } = data;
     console.log("\nDB addContentDBFunction called\n");
 
 
-    await db.insert(ContentTable).values(
-        { title, description, link, tags, category, userId }  // if description or tags are undefined then drizzle wrap them as null in database cause they are not defined as notNull in schema
-    );
+    const result = await db.insert(ContentTable).values(
+        { title, description, link, tags, category, userId } // if description or tags are undefined then drizzle wrap them as null in database cause they are not defined as notNull in schema
+    ).returning({ contentId: ContentTable.id });
+
+    if (result[0]?.contentId) {
+        const isNewContent = true;
+        if (share) await createContentShareLinkFunc(result[0]?.contentId, isNewContent);
+    }
+    // means something gone wrong throw error
+    else {
+        throw new AppError("Something went wrong while adding new content", 500, "DB error", true)
+    }
+
 }
 
 

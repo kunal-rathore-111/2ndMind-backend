@@ -67,4 +67,7 @@ const publicDashboard = async (req: Request, res: Response) => {
 
 }
 
+
+
+
 export const contentController = { dashboard, addContent, deleteContent, updateContent, publicDashboard }
