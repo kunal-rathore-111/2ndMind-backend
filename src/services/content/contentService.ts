@@ -3,7 +3,7 @@ import { db } from "../../config/dbDrizzle";
 import { ContentShareLinkTable, ContentTable } from "../../drizzle/schema";
 import type { z } from "zod";
 import type { contentZodSchema } from "../../validator/zod/contentZod";
-import { createContentShareLinkFunc } from "./contentShareLinkTable";
+import { createContentShareLinkFunc, deleteContentShareLinkFunc } from "../share/contentShareService";
 import AppError from "../../middlewares/appError";
 
 
@@ -44,16 +44,14 @@ export const deleteContentService = async (
     { userId, contentId }: deleteContent_DTO) => {
 
     console.log("\nDB deleteContentDBFunction called\n");
-    const d = await db.delete(ContentTable).where(and(
+    const result = await db.delete(ContentTable).where(and(
         eq(ContentTable.userId, userId),
         eq(ContentTable.id, contentId)
     )).returning({ userId: ContentTable.userId });
 
-    console.log(d);
-    return d;
-
+    if (!result[0]?.userId) throw new AppError("Content not found", 404, "Not found")
+    else return;
 }
-
 
 
 interface updateContent_DTO extends deleteContent_DTO {
@@ -66,12 +64,18 @@ interface updateContent_DTO extends deleteContent_DTO {
 export const updateContentService = async (
     { userId, contentId, newColumnData }: updateContent_DTO) => {
 
+    const { title, description, link, category, tags } = newColumnData;
     console.log("\nDB updateContentDBFunction called\n");
 
 
-    await db.update(ContentTable).set(newColumnData).where(and(
+    const result = await db.update(ContentTable).set({ title, description, link, category, tags }).where(and(
         eq(ContentTable.userId, userId),
         eq(ContentTable.id, contentId)
-    ));
+    )).returning({ contentId: ContentTable.id });
+
+    if (!result[0]?.contentId) {
+        throw new AppError("Content not found", 404, "Not found")
+    }
+    else return;
 
 }

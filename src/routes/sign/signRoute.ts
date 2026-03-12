@@ -3,10 +3,10 @@
 import express from "express";
 
 
-import { signZod } from "../middlewares/signMiddleware";
-import { signUpController, signInController, signOutController } from "../controllers/signController";
-import { signInSchema, signUpSchema } from "../validator/zod/accountZod";
-import { signLimiter } from "../utils/limiter";
+import { signZod } from "../../middlewares/signMiddleware";
+import { signInSchema, signUpSchema } from "../../validator/zod/accountZod";
+import { signLimiter } from "../../utils/limiter";
+import { signInController, signOutController, signUpController } from "../../controllers/user/signController";
 
 export const sign = express();
 

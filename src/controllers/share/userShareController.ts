@@ -1,5 +1,6 @@
 import type { Request, Response } from "express";
-import { createShareLinkFunc, deleteShareLinkFunc, getShareLinkFunc } from "../services/drizzle/userShareLinkTable";
+import { createShareLinkFunc, dataByUserShareLinkFunc, deleteShareLinkFunc, getShareLinkFunc } from "../../services/share/userShareLinkService";
+import AppError from "../../middlewares/appError";
 
 
 
@@ -32,4 +33,16 @@ const getUserShareLink = async (req: Request, res: Response) => {
     }
 }
 
-export const userController = { createORdeleteUserShareLink, getUserShareLink };
+
+const publicDashboard = async (req: Request, res: Response) => {
+    const hash = Array.isArray(req.params.share_hash) ? req.params.share_hash[0] : req.params.share_hash;
+    if (!hash) throw new AppError("Link not found", 404, "NotFound");
+    const result = await dataByUserShareLinkFunc(hash);
+    return res.status(200).json({
+        result
+    })
+}
+
+
+export const userShareController = { createORdeleteUserShareLink, getUserShareLink, publicDashboard };
+

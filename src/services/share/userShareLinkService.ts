@@ -47,7 +47,7 @@ export const getShareLinkFunc = async (userId: string) => {
 
 
 
-export const dataByShareLinkFunc = async (linkHash: string) => {
+export const dataByUserShareLinkFunc = async (linkHash: string) => {
 
     const data = await db.select({
         UsersData: UsersTable,

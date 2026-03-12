@@ -23,17 +23,23 @@ export const createContentShareLinkFunc = async (contentId: string, isNewContent
     }
     // If no link exists or new content then create a new one
     const contentSharehash = hashLink();
-    await db.insert(ContentShareLinkTable).values({
+    const result = await db.insert(ContentShareLinkTable).values({
         contentSharehash,
         contentId
-    });
-    return contentSharehash;
+    }).returning({ UserShareLinkTableId: UserShareLinkTable.id });
+    if (result[0]?.UserShareLinkTableId) return contentSharehash;
+    else throw new AppError("Content share link not created, please try again later", 500, "Server Error");
 }
 
 
 export const deleteContentShareLinkFunc = async (contentId: string) => {
 
-    await db.delete(UserShareLinkTable).where((eq(ContentShareLinkTable.contentId, contentId)));
+    const result = await db.delete(ContentShareLinkTable).where((eq(ContentShareLinkTable.contentId, contentId))).returning({ ContentShareLinkTableId: ContentShareLinkTable.id });
+
+    if (!result[0]?.ContentShareLinkTableId) {
+        throw new AppError("Content share link not found", 404, "Not found")
+    }
+    else return;
 }
 
 

@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
-import { createContentShareLinkFunc, dataByContentShareLinkFunc, deleteContentShareLinkFunc } from "../services/drizzle/contentShareLinkTable";
-import AppError from "../middlewares/appError";
+import { createContentShareLinkFunc, dataByContentShareLinkFunc, deleteContentShareLinkFunc } from "../../services/share/contentShareService";
+import AppError from "../../middlewares/appError";
 
 
 
@@ -20,7 +20,7 @@ const createORdeleteShareLink = async (req: Request, res: Response) => {
     }
 }
 
-const singleContent = async (req: Request, res: Response) => {
+const sharedContent = async (req: Request, res: Response) => {
     const content_share_Hash = Array.isArray(req.params.content_share_hash) ? req.params.content_share_hash[0] : req.params.content_share_hash;
 
     if (!content_share_Hash) throw new AppError("Link not found", 404, "NotFound");
@@ -30,4 +30,5 @@ const singleContent = async (req: Request, res: Response) => {
         result
     })
 }
-export const contentShareLinkController = { createORdeleteShareLink, singleContent };
+
+export const contentShareController = { sharedContent, createORdeleteShareLink };

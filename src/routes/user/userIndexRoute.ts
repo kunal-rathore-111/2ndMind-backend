@@ -2,25 +2,20 @@
 import express from "express";
 import { authMiddleware } from "../../middlewares/authMiddleware";
 
-import { content } from "./contentRoute";
-import { contentController } from "../../controllers/contentController";
-import { userController } from "../../controllers/userShareController";
-import { userAccount } from "./userAccountRoute";
-import { contentShareLinkController } from "../../controllers/contentShareController";
+import { content } from "./content/contentRoute";
+import { userAccount } from "./account/userAccountRoute";
+import { shareContent } from "./share/shareContentRoute";
+import { shareUser } from "./share/shareUserRoute";
 
 
 export const user = express();
 
-user.use('/content', authMiddleware, content);
-
 user.use('/account', authMiddleware, userAccount);
 
-user.get('/dashboard', authMiddleware, contentController.dashboard);
+user.use('/content', authMiddleware, content);
 
-user.get('/share', authMiddleware, userController.getUserShareLink); // GET: Check if share link exists and return shareHash
+user.use('/share-content', shareContent);
+user.use('/share-user', shareUser);
 
-user.post('/share', authMiddleware, userController.createORdeleteUserShareLink); // POST: Create or delete share link on the basis of existence in db
 
-user.get('/public/:share_hash', contentController.publicDashboard);
-user.get('/public/shared-content/:content_share_hash', contentShareLinkController.singleContent);
 

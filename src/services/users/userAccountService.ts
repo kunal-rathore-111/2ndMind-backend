@@ -4,11 +4,10 @@ import AppError from "../../middlewares/appError";
 import { decodePassword, hashPassword } from "../../utils/hashFunc"
 import { eq } from 'drizzle-orm';
 import type { SignInTypes, SignUpTypes, UpdatePasswordTypes } from "../../validator/zod/accountZod";
-import { setDefaultResultOrder } from "dns/promises";
 
 
 
-export const createUser = async ({ username, email, password }: SignUpTypes) => {
+export const createUserService = async ({ username, email, password }: SignUpTypes) => {
 
     const hashedPassword = await hashPassword(password);
 
@@ -22,7 +21,7 @@ export const createUser = async ({ username, email, password }: SignUpTypes) => 
     return user[0]?.userId;
 
 }
-export const findUser = async ({ email, password }: SignInTypes) => {
+export const findUserService = async ({ email, password }: SignInTypes) => {
     const user = await db.query.UsersTable.findFirst({
         where: eq(UsersTable.email, email)
     });
@@ -39,7 +38,7 @@ export const findUser = async ({ email, password }: SignInTypes) => {
 export const deleteAccountService = async ({ email, password }: SignInTypes) => {
 
     // first find user with the email and password, if found then delete
-    const user = await findUser({ email, password });
+    const user = await findUserService({ email, password });
     return await db.delete(UsersTable).where(eq(UsersTable.id, user.id)).returning();
 
 }
@@ -47,7 +46,7 @@ export const deleteAccountService = async ({ email, password }: SignInTypes) => 
 export const updatePasswordService = async ({ email, password, newPassword }: UpdatePasswordTypes) => {
 
     // first find user with the email and password, if found then updatePassword
-    const user = await findUser({ email, password });
+    const user = await findUserService({ email, password });
 
     const updatedHashedPass = await hashPassword(newPassword);
 

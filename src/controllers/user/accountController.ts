@@ -1,6 +1,6 @@
 import type { Request, Response } from "express"
-import { deleteAccountService, updatePasswordService } from "../services/drizzle/usersTable";
-import AppError from "../middlewares/appError";
+import AppError from "../../middlewares/appError";
+import { deleteAccountService, updatePasswordService } from "../../services/users/userAccountService";
 
 
 const deleteAccount = async (req: Request, res: Response) => {
@@ -24,8 +24,6 @@ const updatePassword = async (req: Request, res: Response) => {
         throw new AppError("User password update request failed, please try again", 500, "InternalError")
     }
     return res.status(200).send({ message: "Password updated successfully" });
-
-
 }
 
 
