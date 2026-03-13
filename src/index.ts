@@ -53,4 +53,8 @@ app.use('/app/v2', requestIdMiddleware, indexRoute);
 
 app.use(errorMiddleware); // catches all errors, apperror -- if we put it at top then all request will be considered as error 
 
-app.listen(PORT, () => { console.log(`Server started at ${PORT}`) })
+if (process.env.VERCEL !== "true") {
+
+    app.listen(PORT, () => { console.log(`Server started at ${PORT}`) })
+}
+export default app; // for deployment
