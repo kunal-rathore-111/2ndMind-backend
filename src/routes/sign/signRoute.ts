@@ -3,10 +3,10 @@
 import express from "express";
 
 
-import { signZod } from "../middlewares/signMiddleware.js";
-import { signUpController, signInController, logoutController } from "../controllers/signController.js";
-import { signInSchema, signUpSchema } from "../validator/zod/signZod.js";
-import { signLimiter } from "../utils/limiter.js";
+import { signZod } from "../../middlewares/signMiddleware";
+import { signInSchema, signUpSchema } from "../../validator/zod/accountZod";
+import { signLimiter } from "../../utils/limiter";
+import { signInController, signOutController, signUpController } from "../../controllers/user/signController";
 
 export const sign = express();
 
@@ -19,5 +19,5 @@ sign.post('/sign-up', signZod(signUpSchema), signUpController);
 sign.post('/sign-in', signZod(signInSchema), signInController);
 
 // logout route - no auth middleware needed (anyone can logout, even with invalid token)
-sign.post('/logout', logoutController);
+sign.post('/sign-out', signOutController);
 

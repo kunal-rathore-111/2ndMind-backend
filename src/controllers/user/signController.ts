@@ -1,7 +1,8 @@
 import type { Request, Response } from "express";
+import { createUserService, findUserService } from "../../services/users/userAccountService";
+import { createJWT } from "../../utils/jwt";
 
-import { createJWT } from "../utils/jwt.js";
-import { createUser, findUser } from "../services/drizzle/usersTable.js";
+
 
 
 
@@ -9,7 +10,7 @@ export const signUpController = async (req: Request, res: Response) => {
 
     const { email, username, password } = req.body;
     // Using email as username - no separate username field needed
-    const userId = await createUser(email, username, password);
+    const userId = await createUserService({ email, username, password });
 
     const token = createJWT(userId, username);
     return res.cookie('token', token, {
@@ -25,7 +26,7 @@ export const signUpController = async (req: Request, res: Response) => {
 export const signInController = async (req: Request, res: Response) => {
     const { email, password } = req.body;
     // finding  does user exists in db 
-    const result = await findUser(email, password);
+    const result = await findUserService({ email, password });
 
     const jwtToken = createJWT(result.id, result.username); // creating jwt and sending in cookies
     res.cookie('token', jwtToken, {
@@ -38,15 +39,15 @@ export const signInController = async (req: Request, res: Response) => {
 
 }
 
-export const logoutController = (req: Request, res: Response) => {
+export const signOutController = (req: Request, res: Response) => {
     // Clear the authentication cookie by setting it with expired date
 
     res.cookie('token', '', {
         httpOnly: true,
         sameSite: process.env.NODE_ENV === "production" ? 'none' : 'lax',
         secure: process.env.NODE_ENV === "production" ? true : false,
-        expires: new Date(0), // Set expiration to epoch (Jan 1, 1970) = immediately expired
+        expires: new Date(0), // Set expiration to (Jan 1, 1970) = immediately expired
     }).status(200).json({
-        message: "Logout successful"
+        message: "Signout successful"
     });
 }

@@ -1,8 +1,8 @@
 
 import express from "express";
 
-import { sign } from "./signRoute.js"
-import { user } from "./userRoute.js"
+import { sign } from "./sign/signRoute"
+import { user } from "./user/userIndexRoute"
 
 export const indexRoute = express();
 

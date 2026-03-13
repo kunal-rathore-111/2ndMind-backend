@@ -6,14 +6,14 @@ import express from "express";
 import cookieParser from 'cookie-parser';
 
 
-import { requestIdMiddleware } from './middlewares/requestIdMiddleware.js';
+import { requestIdMiddleware } from './middlewares/requestIdMiddleware';
 
-import { indexRoute } from './routes/indexRoutes.js';
-import { errorMiddleware } from './middlewares/errorMiddleware.js';
+import { indexRoute } from './routes/indexRoute';
+import { errorMiddleware } from './middlewares/errorMiddleware';
 
 
-import { globalLimiter } from './utils/limiter.js';
-import AppError from './middlewares/appError.js';
+import { globalLimiter } from './utils/limiter';
+import AppError from './middlewares/appError';
 
 const app = express();
 const PORT = Number(process.env.PORT) || 3000;
