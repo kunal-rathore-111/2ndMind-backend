@@ -7,10 +7,10 @@ import AppError from "../../middlewares/appError";
 const createORdeleteShareLink = async (req: Request, res: Response) => {
 
     const share = req.body.share;
-
+    if (share === undefined) throw new AppError("Share variable not found", 404, "Not found");
     const contentId = req.contentId;
     console.log(contentId);
-    if (share) {
+    if (share === true) {
         const shareHash = await createContentShareLinkFunc(contentId, false);// not new content
         return res.json({ hash: shareHash })
     }

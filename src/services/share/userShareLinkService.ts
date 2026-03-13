@@ -32,7 +32,12 @@ export const createShareLinkFunc = async (userId: string) => {
 
 
 export const deleteShareLinkFunc = async (userId: string) => {
-    await db.delete(UserShareLinkTable).where((eq(UserShareLinkTable.userId, userId)));
+
+    const result = await db.delete(UserShareLinkTable).where((eq(UserShareLinkTable.userId, userId))).returning({ UserShareLinkTableId: UserShareLinkTable.id });
+
+    if (!result[0]?.UserShareLinkTableId) throw new AppError("No share link found to delete, please try again", 404, "Not found");
+
+    return;
 }
 
 export const getShareLinkFunc = async (userId: string) => {

@@ -11,5 +11,5 @@ export const shareContent = express();
 
 shareContent.get('/public/:content_share_hash', contentShareController.sharedContent);
 
-shareContent.patch('/update-share-link/:contentId', authMiddleware, Content_MW, contentShareController.createORdeleteShareLink);
+shareContent.patch('/public/update-share-link/:contentId', authMiddleware, Content_MW, contentShareController.createORdeleteShareLink);
 

@@ -7,7 +7,7 @@ import AppError from "../../middlewares/appError";
 const createORdeleteUserShareLink = async (req: Request, res: Response) => {
 
     const share = req.body.share;
-
+    if (share === undefined) throw new AppError("Share variable not found", 404, "Not found")
     const userId = req.userId;
     console.log(userId);
     if (share) {
